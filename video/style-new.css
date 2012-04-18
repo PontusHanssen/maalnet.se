@@ -1,0 +1,217 @@
+body
+{
+	background-color:#eeeeee;
+	font-size:13px;
+	font-family:Verdana, Liberation Sans, DejaVu Sans, Nimbus Sans, Verdana, Arial, Trebuchet MS, sans-serif;
+	margin:0px;
+	padding:12px 15% 12px 15%;
+	text-align:justify;
+	color:#2c2c2c;
+}
+
+
+a:link, a:visited
+{
+	text-decoration:none;
+	color:#252E4D;
+}
+
+a:active, a:hover
+{
+	text-decoration:underline;
+	color:#598683;
+}
+
+#page
+{
+	border:1px solid #a4a4a4;
+	background-color:#ffffff;
+	padding:0px;
+	margin:0px;
+}
+
+#header
+{
+	background-color: #FFF;
+	background-image: url("Uploads/Namnlös.png");
+	color: #000;
+	margin:0px;
+	padding-top: 80px;
+	padding-bottom: 80px;
+	text-align: center;
+}
+
+#header h1
+{
+	font-family: Comic Sans MS;
+	margin:0px;
+	padding:0px;
+	font-size:38px;
+	display:inline;
+}
+
+#header p
+{
+	font-size:16px;
+	font-style:italic;
+	display:inline;
+	padding:0px 0px 0px 16px;
+	margin:0px;
+	color: #aaaaaa;
+}
+#navigation
+{
+	clear: both;
+	margin: 0;
+	position: relative; top: -25px;
+}
+#navigation ul
+{
+	float:right;
+	width:100%;
+	margin-left: auto;
+	margin-bottom: 10px;
+	padding:10px 0 10px 0;
+	background-color: #555;
+	border-top:1px solid #000000;
+	border-bottom:1px solid #000000;
+}
+
+#navigation ul li
+{
+
+	display:inline;
+	margin: auto;
+}
+
+#navigation a
+{
+	float:none;
+	width:100px;
+	padding:10px 10px 10px 10px;
+	margin:auto;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	text-decoration:none;
+	font-weight: bold;
+	font-size: 18px;
+	text-align:center;
+}
+
+#navigation a:visited, #navigation a:link
+{
+	background-color:#555;
+	color:#ddd;
+}
+
+#navigation li#selected a:visited, #navigation li#selected a:link
+{
+	background-color:#f9f9f5;
+	border-left:1px solid #000000;
+	border-right:1px solid #000000;
+	color:#000000;
+}
+
+#navigation a:active, #navigation a:hover
+{
+	background-color:#888;
+	color:#fff;
+}
+
+#left, #right, #main
+{
+	margin:0px 10px 0px 20px;
+	padding:0px;
+}
+
+#right
+{
+	width:33%;
+	float:right;
+	background-color: #FFF;
+	border: 0;
+	padding: 0 0 0 10px;
+}
+#actions
+{
+	border: 1px solid gray;
+	padding: 15px;
+}
+#actions h2 h3
+{
+}
+#actions ul
+{
+	list-style:none;
+	padding: 0;
+}
+
+#actions li
+{
+	padding-bottom:10px;
+}
+#actions img
+{
+	width: 32px;
+	border: 0;
+}
+#left
+{
+	width:67%;
+}
+
+#main
+{
+	margin:0px 10px 0px 10px;
+}
+
+
+#folderlist{
+	margin-top: 10px;
+}
+ul#item
+{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.trigger span img
+{
+	margin-right: 5px;
+}
+.menu img
+{
+	max-width: 200px;
+	padding-top: 10px;
+}
+.trigger ul.menu
+{
+	display: none;
+	list-style: none;
+	position: absolute;
+#	left: 25%;
+	z-index: 100;
+	border: 1px solid gray;
+#	width: 100px;
+	padding: 0 10px 0 10px;
+	background-color: #FFF;
+
+}
+.trigger:hover ul.menu
+{
+	display: block;
+}
+#convertdoc
+{
+	display: none;
+	background-color: #FFF;
+	position: absolute;
+	top: 50%;
+	left: 25%;
+	z-index: 100;
+	margin-left: auto;
+	margin-right: auto;
+	border: 1px solid black;
+	width: 25%;
+	text-align: center;
+}

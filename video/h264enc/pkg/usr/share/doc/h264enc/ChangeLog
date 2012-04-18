@@ -1,0 +1,2617 @@
+2011-08-20 - h264enc 9.4.0
+	* Disable mbtree in multipass mode to prevent segfaulting MEncoder due to differences in
+	  frames amount in the passlog file. Disabling mbtree reduces quality but saves us a crash
+	  in MEncoder
+	* Notify the user that the script does not support AAC in AVI anymore. Also exit if user
+	  has not selected any of the other supported containers
+	  
+2011-08-08 - h264enc 9.3.9
+	* Bugfix: selecting the x264 internal denoiser does nothing due to missing $nr variable
+	  in the MEncoder options
+	  
+2011-07-23 - h264enc 9.3.8
+	* Update the mq, nq, hq, vhq, ehq, uhq and ihq presets. Increase subme by 1. For the ihq
+	  preset, this means that it uses subme 11 now which requires latest x264 from git
+	  
+2011-05-15 - h264enc 9.3.7
+	* Removed the ssim and psnr options from the presets. Should only be used for benchmarking
+	
+2011-04-03 - h264enc 9.3.6
+	* Fixed the subtitles function which got broken when the get_selection_func()
+	  function got introduced
+	  
+2011-03-29 - h264enc 9.3.5
+	* Added support for setting the crop rounding value
+	
+2011-03-09 - h264enc 9.3.4
+	* Fix option 4 and 5 of the video_deblock_func() function. Wrong vars used
+	
+2011-02-21 - h264enc 9.3.3
+	* Fixed a bug in directory batch mode were wrong conditional was used to check
+	  for the DEFOUTPUT variable
+	* Display which file is currently being processed in batch mode
+	* Check only for files while in batch mode
+	* Do not exit if user types an incorrect answer to y/n questions. Instead, ask
+	  the question again. Patch by Jan-Hendrik Peters and friends
+	
+2011-01-08 - h264enc 9.3.2
+	* Use -demuxer lavf when trying to get the video length for bitrate calculation
+	  for a target file size. Should be more reliable on M2TS/TS files
+	* Add support for the delogo filter. Patch by Haiko Michelfeit <haiko AT zsyndikat DOT org>
+	  Config file version is bumped to 19
+	* Updated copyright dates
+	  
+2010-12-05 - h264enc 9.3.1
+	* Fix for the custom preset (cp) option.
+	
+2010-11-26 - h264enc 9.3.0
+	* Remove double $HOME variable in the -scan option
+	
+2010-10-29 - h264enc 9.2.9
+	* Fix typo in the backup_file_func(): exisiting -> existing
+	* Workaround multichan FAAC encoding. FAAC somehow does not like multichan PCM from
+	  MPlayer but it does if one treats it as raw using -P in FAAC. Nero/FLAC/Vorbis have
+	  no issues, though. Go figure
+	* Added support for setting subtitle codepage during hardcoding of external subs
+	* Added support for the audio equalizer filter. This updates the config file version
+	  to 18
+	* Removed 'time' requirement
+	
+2010-09-16 - h264enc 9.2.8
+	* Workaround mencoder stupidity. With recent versions of mencoder that have subs
+	  enabled by default (who came up with that great idea?), in case the user selects
+	  to dump a sub for importing into mkv/mp4, during multipass encoding the first sub
+	  will always get hardcoded due to missing -nosub option in the 2nd and 3rd pass code.
+	  This is only valid for multipass encodes so people using one pass modes (-1p, -qp or -crf)
+	  are safe.
+	  
+2010-09-15 - h264enc 9.2.7
+	* Small update to the -scan option. Just check if input file is there, regardless if
+	  user provides the full path or not
+	* Enable trellis in some presets that use CAVLC
+	
+2010-08-23 - h264enc 9.2.6
+	* Fixed a syntax error in the iphq preset
+	
+2010-08-21 - h264enc 9.2.5
+	* Update QuickTime & iPhone presets. Patch by gongloo
+	
+2010-07-21 - h264enc 9.2.4
+	* Typo fix in the display_quality_preset_func(); verslow -> veryslow. As this is an
+	  informative function, it does not affect the encoding configuration
+	* Force -nosub option in case subtitles are skipped. This is to prevent auto-loading
+	  of subs
+	
+2010-06-25 - h264enc 9.2.3
+	* Added support for x264's preset, tune and profile options. This adds two additional
+	  optional args [-t (for tune) and -pf (for profile)] which can only be used with an
+	  x264 preset, not with the built-in script presets. If used with those, these args
+	  will be ignored.
+	  Examples on how to use x264 presets (which is also explained in the -help option)
+	  h264enc -crf -p slow
+	  h264enc -crf -p slow -t film
+	  h264enc -crf -p slow -pf main
+	  h264enc -crf -p slow -t film -pf high
+	  One can also switch the -t and -pf options, eg: h264enc -crf -p slow -pf high -t film
+	* Updated the man page
+	
+2010-05-15 - h264enc 9.2.2
+	* Small bugfix in the get_devices_func() function; script exits when user hits enter
+	  to accept default device
+	* Remove AVI menu entry as supported container when using FAAC for audio encoding
+	
+2010-04-29 - h264enc 9.2.1
+	* Reworked a bit the audio channels decode/output function. This function also got
+	  renamed from audio_channels_func() to audio_channels_decode_func()
+	* Added support for the audio channels filter which can be used to add/remove/route channels
+	  This updates the config file to version 17 and adds variable ALLOW_AUD_CHANNELS
+	* Bugfix: audio filters were not inserted when doing 1-pass encodes
+	
+2010-04-24 - h264enc 9.2.0
+	* Switch to using external FAAC encoder to work around an issue in mkvmerge where
+	  it flags AAC audio taken from an AVI as being Main profile regardless if LC profile
+	  is used for encoding or not. Problem noticed & reported by benpro. This updates the
+	  config file to version 16 and requires FAAC to be installed.
+	* Same small cleanups
+	* Updated the man page
+	
+2010-03-28 - h264enc 9.1.9
+	* Replaced sed with awk for checking available disk space. Should work better on
+	  FreeBSD systems. Patch by ennob from doom9
+	* Updated interlace options and presets to support the latest x264 from git. Note
+	  that due to these changes, h264enc's presets are incompatible with older x264
+	  versions so please upgrade to latest x264 from git!
+	* Small update to the preset.cfg file
+	  
+2010-03-18 - h264enc 9.1.8
+	* Small bugfix: keyint and keyint_min weren't passed on to MEncoder when using some
+	  presets
+	
+2010-03-16 - h264enc 9.1.7
+	* Space escaped some previously missed variables
+	* Use one variable in the presets (x264params) for all MEncoder x264 encoding options.
+	  Reduces some code and simplifies things a bit
+	* Updated the preset.cfg file to support the "one variable for all x264 encoder opts"
+	  Note: those using custom preset files for encoding should read the preset.cfg file
+	  in the doc dir and adapt their existing preset files to be compatible with the
+	  changes. Previous older custom presets written by users will not work with this and
+	  future versions of h264enc!
+	
+2010-02-18 - h264enc 9.1.6
+	* Added new veriable 'DEFOUTPUT' to the config file which can be used to set a default
+	  output directory. This updates the config to version 15
+	* Modified the set_output_filename_func() function to support the above variable.
+		- If the DEFOUTPUT variable is empty, user can either provide just the output
+		  name for the encode (in this case the script assumes $HOME as output dir), or
+		  the full path and output name, which in this case the script will create the
+		  output dir if it's not present or will do a write test when the dir is present
+		  to see if it's writable by the user. If creation of output dir or the write test
+		  fails, the script exits with a notice.
+		- If the DEFOUTPUT variable contains a custom output dir, the script will test for
+		  it and create it if it's not present. If creation fails, the script exits with a
+		  notice. If the dir is present, the script will do a write test to see if the
+		  custom dir is writable. If not, the script exits with a notice.
+		- The DEFOUTPUT variable can be overwritten on the command line. This means that if
+		  user has set a custom output dir in the DEFOUTPUT variable but provides a path when
+		  asked on the command line, that path will be used instead of the one in the DEFOUTPUT
+		  variable. The script then will either check and create the provided output dir on
+		  the command line (if that dir is not present) or will do a write test if the dir
+		  is present. Upon failure of creation or write test, the script exits with a notice.
+		  If no path is provided on the command line but only the output name for the encode,
+		  the script will use the one set in the DEFOUTPUT variable.
+	
+2010-01-30 - h264enc 9.1.5
+	* Reduced duplication in the audio encode exporting code by moving it inside functions
+	* Reduced duplication in the MKV/MP4/TS/OGM exporting code by moving it inside functions
+	* Reduced duplication in the code that prints some information before encoding starts
+	* Various minor code improvements
+	
+2010-01-21 - h264enc 9.1.4
+	* Set default H.264 level to 'auto' and also accept integer numbers as levels in addition
+	  to accepting fixed point ones, ie both 41 and 4.1 are now accepted as valid levels
+	* Renamed the rmconf() function to rmtemp() 
+	* Moved creation of temp dir, the interrupt_func() and rmtemp() functions at the beginning
+	  of the script
+	* Fixed a bug in the DVD part of the -scan option where lsdvd doesn't get a valid device
+	  passed. Bug was introduced due to changes in the new get_devices_func() function
+	* Reduced duplication in the mencoder_opts() function
+	* Various small code improvements
+	  
+2010-01-19 - h264enc 9.1.3
+	* Made the TEMPDIR variable escape spaces in directory names
+	* Small update to the mkvtags_func() function
+	* Removed the -a52drc option for AC3 encoding
+	* Added new x264 intra_refresh option to the script and the preset.cfg file
+	* Added two new variables, DVD_DEVICE and CDROM_DEVICE, to the config file where user
+	  can set a default block device to encode from. This updates the config file to version 14
+	* Merged the get_dvd_devices_func() and get_vcd_devices_func() functions into a new one
+	  called get_devices_func()
+	
+2009-12-23 - h264enc 9.1.2
+	* Fixed a severe bug that can cause in some cases severe data loss when using a 
+	  custom temp directory. It manifests itself when using a 'top' directory as custom
+	  temp directory such as a partition mount point or even the user's home directory.
+	  In such cases, the top directory will be deleted upon script termination or when encoding
+	  finishes, resulting in possible massive data loss due to rm -rf $TEMPDIR if TEMPDIR was
+	  set to, for example, /home/username or points to a mount point or another directory that
+	  may be important to the user.
+	  From now on, always use a job<pid> directory inside the one set in the TEMPDIR variable
+	  so it'll only delete the job<pid> directory and not its parent one, minimizing possibility
+	  of a data loss disaster
+	* Set nomixed_refs for the iphq/iphhq presets
+	  
+2009-12-10 - h264enc 9.1.1
+	* Disabled weightp for the AppleTV presets
+	* Added new option sliced_threads present in latest x264 from git
+	* Enabled b_pyramid for some presets that use mbtree as it now works with mbtree
+	* Updated the preset.cfg file. Added sliced_threads option
+	* Changed all video ALLOW_* variables in the config file to ALLOW_VID_*
+	* When using dd to dump a DVD to an ISO, use options noerror,sync and a bs size of 2048
+	* Added support for sending mails. This requires the 'mailx' program and a valid .mailrc
+	  file in the home directory. Mail notification can be enabled in the config file of
+	  h264enc which also offers an example of a gmail setting for .mailrc
+	* Bumped config file version to 13
+	* Updated copyright dates
+	
+2009-11-09 - h264enc 9.1.0
+	* Implemented a simple telecine detector for NTSC DVDs. Currently it's a dumb solution
+	  which can't distinguish between hard telecine and interlacing but it's enough to
+	  detect soft telecine and mixed progressive/telecine content which is more common
+	* Simplified the FPS detection code
+	* Update to all presets: added new weightp x264 option. This requires latest x264
+	  revision from git
+	* Updated the preset.cfg file. Added weightp option
+	* Small general code improvements and cosmetics
+	  
+2009-11-04 - h264enc 9.0.9
+	* Replaced a few if conditionals with case statements in the neroaac_audio_func() function
+	* Sed a comma at the end of resolution detection in case we're dealing with TS files. The
+	  default TS demuxer in MPlayer has a comma at the end of the resolution info which results
+	  in errorneous behavior in the bc calculation
+	* Simplified the resolution detection code
+	* Some small cleanups
+
+2009-10-19 - h264enc 9.0.8
+	* Force stereo audio for Nero HE-AACv2 as it doesn't support anything else, thus
+	  it results in failure if user tries to encode with more than two channels. This
+	  updates the audio_channels_func() function and also adds a small new independent
+	  one called neroaac_hev2_func() which only sets the channels to two if the channels
+	  array variables are empty, as is the case when the user did not set the channels
+	* Small improvements to the ABR/VBR default audio bitrates for the neroAacEnc encoder.
+	  Base the default bitrates on the chosen AAC profile, i.e. if user chooses HE-AACv1,
+	  default bitrate will be 55 kbps or in case of quality-based VBR encoding a value of
+	  0.22. For LC-AAC and HE-AACv2, default bitrates and quality values will be 96 kbps
+	  or 0.35 and 25 kbps or 0.11, respectively. Note that this assumes the input audio is
+	  stereo so if it's anything else than that, it's up to the user to decide on bitrates
+	  or quality values
+	* Set default to a capital letter in questions where one needs to answer with y or n
+	* Update to all presets: updated the b_pyramid option to use the new args none/strict/normal
+	  present in latest x264 revision. Note that this requires both latest MPlayer from SVN
+	  and latest x264 revision from git
+	* Small b_pyramid update to the preset.cfg file
+	  
+2009-10-17 - h264enc 9.0.7
+	* Added new function video_subtitles_align_func() for subtitle alignment control.
+	  Requested by blaz on doom9.org forum.
+	* Added new x264 option 'constrained_intra' to the preset.cfg file.
+	* Added detection of VFR content (1000 fps as reported by MPlayer).
+	* Added X264_VERSION and MKVMERGE_VERSION entries to the mkvtags_func() function.
+	* Simplified a bit the audio exporting code for the first track.
+	
+2009-09-24 - h264enc 9.0.6
+	* MP3 (MPEG1 Layer 3) only supports sample frequencies of 32, 44.1 and 48 kHz
+	  so restrict to those only in the audio_resample_func() function
+	* Set default for the pp7 deblocker to 3
+	* Fixed example typo in the DVD chapters code
+	* Insert the ilpack filter before the scaler to correctly align chroma channels
+	  when preserving interlacing
+	* Added AUDIO_CODEC_TRACK[1|2|3], AUDIO_LANGUAGE_TRACK[1|2|3] and H264ENC_PARAMETERS
+	  entries to the mkvtags_func() function
+	* Enabled adaptive transform for the AppleTV HQ preset (atvhq)
+	* Improved checking the availability of block devices
+	* Added option 'global_header' to the preset.cfg file
+	  
+2009-09-16 - h264enc 9.0.5
+	* Small bugfix: setting the H.264 level for the fghq preset wasn't possible
+	* Small bugfix: the counter in set_output_filename_func() didn't increase itself
+	* Added SOURCE, VIDEO_FILTERS, AUDIO_FILTERS_TRACK[1|2|3], ENCODER and X264_PARAMETERS
+	  entries to the mkvtags_func() function
+	
+2009-09-12 - h264enc 9.0.4
+	* Use only lowercase words in all case statements that deal with the input source
+	* Some small improvements to the exit info in the audio code
+	* Placed the -passlogfile option inside the PASSLOG variable
+	* Set psy_rd to 0.3 for the Anime presets
+	* Allow setting the H.264 level for the PC presets to "auto" so libx264 will
+	  decide itself which level to use based on options and resolution used
+	* Added support for 2-pass Nero AAC audio encoding. Note that 2-pass is only
+	  supported by ABR/CBR encoding and ensures that the output quality is constant
+	  (like VBR) while also ensuring that a specified output bitrate is achieved
+	  (like CBR). Requested by punlo on doom9.org
+	
+2009-09-06 - h264enc 9.0.3
+	* Fixed a typo in the man page, MEnocder -> MEncoder
+	* Small improvement to how the MKV XML tagging file gets exported. Also improved
+	  the XML formatting and added COMMENT string with text "Tagged by h264enc $version"
+	* Added comment tag for MP4 and OGM with the same text as above
+	* Small update to the video_deinterlace_func() function's menu
+	* Add comment header with dates to batch files
+	
+2009-09-04 - h264enc 9.0.2
+	* Added new option sync_lookahead available in latest x264 git and updated the
+	  preset.cfg file
+	* Added support for the noise video filter. This change updates the config file
+	  to version 12. Also, encoding priority now defaults to a nice value of 10 in
+	  the config file
+	* Moved out the code which checks and backups/renames a file if it has the same
+	  name as the output provided by the user to a separate function called
+	  backup_file_func() and also improved it so that if there's already an existing
+	  backup file, the new one will increase its count number by one thus there's no
+	  more overwriting being done anymore. The same thing applies to existing chapter
+	  files and DVD subs
+	* Added support for Year and Genre metadata tagging for the MKV/MP4/OGM containers.
+	  For MKV, the genre and year is set globally using an automatically generated XML
+	  file. MP4 uses the iTunes tagging and OGM the comment space
+	* Updated the man page
+
+2009-09-01 - h264enc 9.0.1
+	* Simplified the audio_channels_func() function a bit
+	* Merged the QP and CRF settings
+	* Increased rc_lookahead a bit for the ehq, uhq and ihq presets
+	* Improved detection of DVD audio language codes. We now specifically grep for the
+	  language word and then print the 2nd positional which gives us the language code.
+	  It works more reliably if the DVD does not report its language code for the audio track(s)
+	  so if this is the case, we fall back to undefined language. The previous code fails in
+	  such cases due to the printing of the 8th positional which will print the "aid:" part when
+	  there's no language code after the "language:" word, resulting in MKV/MP4 muxing failures.
+	  Reported by WalterK from doom9.org
+	* Moved the code that deals with DVD subs/cover files/metadata info/chapters and external
+	  subs for the MP4 container before its audio code
+	* Added slicing to the Blu-ray and AVCHD presets. It increases compliancy with the Blu-ray
+	  specs. Slicing is only available in the latest x264 from git so please upgrade if you
+	  intend to use the Blu-ray/AVCHD presets
+	* Added new options 'slices', 'slice_max_size' and 'slice_max_mbs' to the preset.cfg file
+	* Fixed chapters import for the OGM container. Missing '@' before the chapters input file
+	  results in the file not being imported
+	* Added support for audio language metadata info for the OGM container
+	* Small improvements to how chapters information is added to the output file name
+	
+2009-08-15 - h264enc 9.0.0
+	* Renamed presets f9 and f9hq to fl and flhq
+	* Added new preset 'fghq' specifically optimized for preserving film grain
+	* Removed duplicate videofilters variable. This removes the check for the tfields filter
+	  as now deinterlacing will always be done after cropping (which also speeds up things a bit)
+	  so the crop filter will never complain about crop area being outside of the original if
+	  tfields is used. It also reduces filters maintenance a bit
+	* Turn soft-clipping on in the volume audio filter
+	* Use aq_mode=1 for presets that have mbtree enabled as it usually does better on fades than
+	  aq_mode=2
+	* Updated the man page
+	
+2009-08-11 - h264enc 8.9.9
+	* Reduced the amount of if conditional iterations for setting the scaler interlace variable
+	* Print full path of the output file(s) at the end of encoding
+	* 10L: forgot to enable MB tree for the anihq preset
+	* Replaced variable CONFIGDIR with TEMPDIR. This change updates the config file to version 11
+	* Fixed some spacings issues by moving around some echo's
+	* Simplified the sample encoding code. Reduced some code duplication
+	* Upped psy_rd from 0.6 to 0.8
+	
+2009-08-07 - h264enc 8.9.8
+	* Added support for the audio panning filter. This change also updates the config file
+	  to version 10
+	* Simplifications to the audio_filters_func() and audio_filters_var_func() functions
+	* Moved the audio filters functions after the audio codec ones
+	* Fixed a bug in the audio_channels_func() function for the AAC codec. If user just
+	  hits return to accept the default AAC codec, the channels function was not called
+	  due to missing "" in the first case statement of that function
+	* Enabled MB tree (macroblock tree ratecontrol) for the high quality presets and disabled
+	  b_pyramid for presets that have mbtree enabled as it currently doesn't support it. Note that
+	  mbtree produces a large passlog file when ran in 2-pass mode but can increase quality anywhere
+	  between 2-70%, depending on the content. mbtree is only available in latest x264 git so
+	  please upgrade
+	* Added new options mbtree, rc_lookahead and nopsy to the preset.cfg file
+
+2009-08-01 - h264enc 8.9.7
+	* Added new option -mfr which calculates the maximum allowed frame references within DPB
+	  (Decoded Picture Buffer) limits for different H.264 levels and resolutions
+	* Call the track_echo_func() function inside the select_audio_codec_func() one. Removes
+	  pointless duplication
+	* Don't call mplayer twice in the 2nd/3rd audio track code just to get the audio codec.
+	  Also removed a pointless case statement
+	* Allow users to set the H.264 level when using the standard PC presets
+	* Fixed a few typos in the preset.cfg file
+	* Updated the man page
+
+2009-07-30 - h264enc 8.9.6
+	* Increased subq to 10 (QP-RD) for the IHQ preset. Requires latest x264 from git. Also
+	  lowered frameref from 16 to 8 and bframes from 10 to 7
+	* Add example on how to encode only specific DVD chapters. Some people keep bugging me
+	  about this while it's actually very simple
+	  
+2009-07-24 - h264enc 8.9.5
+	* Switched to the new Auto-variance AQ (aq_mode=2) for all presets. This requires latest x264
+	  revision from git so please upgrade!
+	* Decreased frame references for all iPod presets to 1 and increased subq to 8 for the HQ iPod
+	  presets
+	* Minor improvments to the set_output_filename_func() function
+	* Merged the audio code of the portable device presets. Moderately reduces code duplication in
+	  the audio functions calling code
+	* Added two new presets (ag1 and ag1hq) for Android G1 devices. This brings the total presets
+	  count to 60
+	* Added support for the new gradfun debanding video filter. Although mostly recommended for playback
+	  due to the fact that encoding tends to bring back banding, it can be useful to deband input
+	  sources which show pretty bad and very noticable banding effects before passing the content
+	  to the encoder. The gradfun filter is only available in MPlayer SVN. This also adds a new
+	  variable ALLOW_DEBAND to the config file where one can enable or disable this filter
+	* Added a small while loop to the video_crop_func() function which will keep asking the user for
+	  new crop values until he's satisfied with them. Patch by elektronaut from Doom9.org
+	* Added a new variable PRIORITY to the config file which can be used to set a global priority
+	  nice value for the encoding process. The values one can use are between (and including)
+	  -20 and 19. However, if the script detects that the variable has a negative nice value
+	  set and the script is being executed with regular user privileges, it will print a notice
+	  and exit. This change updates the config file to version 9
+	* Updated the man page
+	
+2009-07-08 - h264enc 8.9.4
+	* Added detection for E-AC3 audio for stream copy and updated the MKV/TS muxing code to support it
+	* Added new option -spr which calculates the Storage and Pixel Aspect Ratios (SAR/PAR) for various
+	  resolutions
+	* Display the amount of chapters each DVD title has when scanning for titles
+	* Display total pixels, SAR and PAR when scanning a file/vcd with the -scan option
+	* Added --no-chapters mkvmerge option for audio files encoded by neroAacEnc so that chapters
+	  won't be copied over to the MKVs from these files
+	* Small update to the install script 
+	* Updated the man page. Fix some small cosmetic issues, patch by Alessio Treglia
+	
+2009-07-01 - h264enc 8.9.3
+	* Fallback to undefined audio language in the AUDLANG[$i] variables if we detect unknown language
+	  from MPlayer's output
+	* Added support for bitrate-based ABR Vorbis encoding in addition to quality-based VBR. ABR mode
+	  in Vorbis resembles quality-based VBR except the encoder averages a given nominal bitrate
+	* Updated the Vorbis part of the video bitrate calculation code
+	* Added new function ratio_and_pixels_func() which calculates and displays the Storage Aspect Ratio (SAR),
+	  Pixel Aspect Ratio (PAR) and total pixels from resolution
+	* Bugfix for track 1 in the internal audio encoding code. If using aacplusenc to encode audio, the case
+	  statement had a wrong selection value (aac++ instead of aac+) resulting in displaying a failed message
+	  and forcing an exit even though the encoding may have succeeded
+	* Simplifications to the internal audio encoding code which reduce code duplication
+	* Small fixes to the video bitrate calculation code
+	* Small tuning to the Blu-ray/AVCHD presets
+	* Small cleanups
+	
+2009-06-26 - h264enc 8.9.2
+	* Set default audio codec for the Blu-ray/AVCHD presets to AC3
+	* Bugfix to the OGM muxing code. Second/third track were ignored when one selects AC3 audio
+	* Added keyint, keyint_min, nr and interlaced variables to the custom preset skeleton file 'preset.cfg'
+	* Moved the AACTYPE variable to the neroaac_audio_func() function and updated the specific parts
+	  that use it in the MKV/MP4 muxing code
+	* Do not automatically detect audio sample rate in directory batch encoding mode. Only do it
+	  for single file/dvd/vcd encodings as in batch mode, detection will only print the sample rate of
+	  the first file but not the other files in the directory so this can mislead the user in thinking
+	  that all files in the directory have the sample rate reported by the script. It is possible to
+	  implement sample rate detection for all files but since we don't know how many files are in
+	  the directory, I do not want the user to see a full screen with sample rate info of each file if
+	  he deals with a directory with a few hundreds or more files in it
+	* Disallow autocropping, if enabled in the config file, for directory batch encodings
+	* Small reordering to the MP4 muxing code
+	* Small update to the install script
+	* Updated the man page
+	
+2009-06-24 - h264enc 8.9.1
+	* Removed audio filters for the 1st pass in 2-pass encoding and for the 1st & 2nd pass of
+	  a 3-pass encoding. They are useless here and it's something I've overlooked for a long
+	  time. Thanks to Mat Kanner for noticing and reporting
+	* Some small changes to the way we pass FPS to MP4Box
+	* Added support for MP4 hinting for RTP/RTSP sessions
+	* Simplifications to the external subs importing code. Also fixed a bug in the MP4 subs
+	  importing code; missing -add option in the MP4SUBS variable will make MP4Box fail
+	* Merged the MKV tagging code with the muxing one
+	* Added support for detection of WMA audio for stream copy
+	* Added support for per track audio codecs for DVD encodings. The user can now select
+	  if he wishes for each track a different audio codec. Mixing audio stream copy with
+	  compression codecs is also possible
+	* Updated all relevant audio functions to support per track audio codecs
+	* Updated the bitrate calculation code to support per track audio codecs
+	* Updated the container muxing code to support the above audio changes
+	  
+2009-06-22 - h264enc 8.9.0
+	* Small improvement to the MKV/MP4 tagging code: support audio tagging of single file
+	  encodes with audio stream copy
+	* Use array variables ${SUBFILE[2]} and ${SUBFILE[3]} instead of ${OUTPUT%.*}_sub2
+	  and ${OUTPUT%.*}_sub3 when dumping the second/third DVD subtitles
+	* Simplified the MKV cover art importing code
+	* Small improvements to video bitrate calculation with audio stream copy
+	* Use only one named pipe for all tracks when encoding to neroAAC/AAC+/Vorbis/FLAC
+	* Major audio code restructuring and partial rewrite. Converted virtually all audio
+	  code variables to array variables. This allows for easy extensibility and much less
+	  code duplication. It's very easy now to add as much audio tracks as one may want to the
+	  code with very little changes/updates needed to the containers code. Also the current
+	  changes may allow very easily to support different audio codecs per track in the future
+	* Added support for a third DVD audio track
+	* Updated the video bitrate calculation for target size to support the above audio changes
+	* Converted most of the variables in the video_subtitles_func() function to arrays. This
+	  moderately reduces some code duplication
+	* Updated the container muxing/tagging code to support the above audio changes
+	* Use external flac encoder to encode to FLAC audio as doing it through mencoder is terribly
+	  broken. This updates the config file to version 8 and adds the 'flac' encoder as dependency
+	* Set the default resampling filter to lavcresample as the other one gives problems when
+	  encoding to FLAC audio and resampling
+	  
+2009-06-19 - h264enc 8.8.7
+	* Simplifications to the MKV tagging code which reduces some code duplication
+	* Bugfix: FAAC acodec2 variable has wrong mpeg value. Must be mpeg=4 instead of mpeg4.
+	  This results in failure in encoding of the second audio track when one selects
+	  FAAC as encoder
+	* Bugfix: FLAC audio was ignored for the second track due to missing value in the selection
+	  of the case statement
+	* Added support for tagging of MKV files when doing a directory batch encoding
+	* Replaced the IMPSUB1, IMPSUB2 and IMPSUB3 variables, used to import subs when input type
+	  is file/directory/vcd, by array variables EXTSUB[1], EXTSUB[2] and EXTSUB[3]. This allows
+	  for less code duplication as these array variables are shared by all input types (including DVD)
+	  and thus we only need to do a small loop and add their values if not empty to the
+	  MKVSUBS, MP4SUBS and OGMSUBS variables
+	* Use as temp directory $HOME/.h264enc/job<PID>
+	* Added new function audio_stream_copy_func() which will print a warning that audio stream copy
+	  in directory batch encoding mode is not recommended unless the user is certain that the files
+	  have a supported audio codec by the MKV/MP4/OGM/TS containers
+	* Group audio filters under a submenu similar to how the video filters are grouped
+	* Some small cleanups
+	
+2009-06-17 - h264enc 8.8.6
+	* Added support for per track audio bitrate for DVD encodings
+	* Added support for per track audio normalization and volume adjustments for DVD encodings.
+	  Updated functions audio_volnorm_func() and audio_volume_func()
+	* Added support for per track audio resampling for DVD encodings. Updated functions
+	  audio_resample_filters_func() and audio_resample_func()
+	* Updated the video bitrate calculation code to support the above audio changes
+	* Bugfix for the qt/bd/avchd presets: audio filters were not called for these presets
+	* Added support for per track AAC profile settings (LC/HE/HEv2) when using the
+	  neroAacEnc audio encoder
+	* Small modifications to the MKV/MP4 tagging and muxing code to support the
+	  per track neroAacEnc AAC profiles. This also includes optimizations to the way
+	  the tagging code handles different AAC profiles. If LC profile is chosen, audio will
+	  be tagged as LC-AAC (along with channels info). For HE and HEv2, audio will be tagged
+	  as HE-AACv1 and HE-AACv2 (along with channels info) respectively
+	* Moved the MKV tagging code inside the MKV muxing code
+	* Converted the EXTSUB1, EXTSUB2 and EXTSUB3 variables, used to import external DVD subs,
+	  to arrays so we can easily check different files for their file extensions
+	* Only allow SRT subs as import into OGM. If another subs format is provided, the
+	  subs will be skipped. For MP4, do not allow ASS/SSA subs since it's not supported yet
+	  by MP4Box. For MKV, do not allow SUP and TTXT subs
+	
+2009-06-15 - h264enc 8.8.5
+	* Update to the video_subtitles_func() function: for DVD encodings, added support
+	  for importing up to three external subtitles into MKV/MP4/OGM. Also added
+	  support for hardcoding an external subtitle into the movie
+	* Updated the MKV/MP4/OGM muxing code to support imports of external subtitles
+	* Increased Psy RD from 0.5 to 0.6 for some presets
+	* If dumping of the second and/or third DVD subtitle fails and user has selected to
+	  import the subs into MKV/MP4, force an exit since container conversion will fail as
+	  the muxing programs will complain about the missing subs. If no container conversion
+	  is chosen or user has chosen not to import the subs and dumping of subs fails, just
+	  continue since there's nothing critical in this case
+	* Use mplayer -really-quiet option instead of redirection to /dev/null when dumping
+	  audio to a named pipe for neroAAC/Vorbis/AAC+ encoding
+	* Some small updates to the man page
+	* Updated the AUTHORS file
+
+2009-06-12 - h264enc 8.8.4
+	* Replaced the --noaudio mkvmerge option with -A due to recent options changes
+	  in mkvmerge version 2.9.5. -A also works for older versions so nothing breaks here
+	* Removed the check_outfile_func() function as its code has been added to the
+	  set_output_filename_func() function, which also has been improved
+	* Added support for FLAC audio in MKV
+	* Removed some code duplication in the MKV metadata tagging code
+	  
+2009-06-09 - h264enc 8.8.3
+	* Added support for adding jpeg/png cover art files to MKV/MP4
+	* Added audio language meta-info for MP4 and TS files
+	* Improved audio language meta-info for MKV files. This also adds metadata
+	  info for the second audio track
+	* Fixed a small bug: the --aac-is-sbr mkvmerge parameter should be set to 0:1
+	  for the second audio track when using aacplusenc as encoder
+	
+2009-06-08 - h264enc 8.8.2
+	* Add iTunes video title name to MP4 files
+	
+2009-05-24 - h264enc 8.8.1
+	* Use the same name for the log file as the output file name
+	* Force using the libmpeg2 decoder when encoding DVDs/VCDs (works slightly better in specific
+	  cases compared to ffmpeg2)
+	* Added support for IVTC 59.940 -> 23.976 fps
+	* Some small code cosmetics
+	
+2009-05-12 - h264enc 8.8.0
+	* Added deinterlace combinations of Yadif + linear blend, linear interpolation, cubic
+	  interpolation, median deint, ffmpeg deint and lowpass 5
+	* Cosmetics to the help menu
+	* Added global audio function audio_filters_func() for calling the resample, volume
+	  normalizing and volume filters
+	* Added 16 new variables to the config file for enabling/disabling of specific audio/video
+	  filters and containers: ALLOW_FPS_CONVERSION, ALLOW_SCALER_TUNING, ALLOW_DSIZE,
+	  ALLOW_EXPAND, ALLOW_COLORSPACE, ALLOW_ASPECT, ALLOW_AUD_RESAMPLE, ALLOW_AUD_NORMALIZE,
+	  ALLOW_AUD_VOLUME, ALLOW_MKV_MUXING, ALLOW_MP4_MUXING, ALLOW_TS_MUXING, ALLOW_OGM_MUXING,
+	  ALLOW_SAMPLE_ENCODING, ALLOW_SCAN_MULTIPLE_VIDSTREAMS and ALLOW_SCAN_MULTIPLE_AUDSTREAMS,
+	  the last two are only effective on file and directory batch encodings
+	* Updated the man page
+
+2009-05-07 - h264enc 8.7.9
+	* Automatically add the shebang line to batch files and make them executable
+	* Added new variable ALLOW_AUTOCROP to the config file which allows the user to enable or
+	  disable automatic cropping
+	* Added MP3 presets and updated target file size code to support them (requested by Rogério Brito)
+	* Some minor adjustments to the hq, vhq, ehq, uhq and ihq presets; decrease b-frames by one
+
+2009-04-29 - h264ec 8.7.8
+	* Small bugfix: video filters variables in the config file were not respected when one
+	  chooses to encode VCDs. 
+	* Add video title meta-data for MKV and OGM when doing directory batch encodings
+
+2009-04-28 - h264enc 8.7.7
+	* Optimize some variables by replacing piping to sed with VARIABLE1="${VARIABLE2%.*}.ext"
+	* Move out the built-in -loop 1 mplayer option to the config file's MPLAYEROPTS variable
+	* Add support for enabling/disabling specific pre/postprocessing filters in the config file.
+	  This adds 7 new variables to the config file where the user can either enable to ask
+	  questions about a specific filter or disable a specific variable, thus skipping
+	  questions about the filter
+	* Moved the video filters code to a new function called video_filters_func(). This also
+	  reduces a bit of code duplication
+	* Add a new option -e which allows the user to edit the config file directly from within the
+	  terminal. This adds a new variable EDITOR to the config file where the user can set his
+	  preferred text editor (defaults to nano)
+	* Silence possible dvdxchap warnings
+	* Updated the man page
+
+2009-04-26 - h264enc 8.7.6
+	* Bugfix: missing 's' in the sed expression of the MP4OUT variable. This results in
+	  missing output file and will fail when one tries to remux to mp4
+
+2009-04-22 - h264enc 8.7.5
+	* Dump first subtitle during the first pass of a multipass encode to avoid possible
+	  delay problems
+
+2009-04-14 - h264enc 8.7.4
+	* Proper file extension handling for directory batch encodings
+	* Removed workaround for bug present in old versions of tsMuxeR. Please upgrade to
+	  tsMuxeR version 1.9.1(b). The previous one is no longer supported
+	* Optimizations to the Blu-ray and AVCHD muxing code
+	* Add video fps value to the tsMuxeR meta file for TS/Blu-ray/AVCHD muxing
+	* User request: add an mplayer variable to the config file where the user can set
+	  custom mplayer options. One should be careful which options he uses as some
+	  of them may introduce problems and make h264enc behave badly. The default option
+	  set in the new MPLAYEROPTS variable is '-noconfig all' which disables parsing of
+	  the mplayer config file
+	* Made the VCD device scanning code a function -> get_vcd_devices_func()
+	* Updated the -scan option to also support VCD scanning
+	* Small cleanups
+	
+2009-04-12 - h264enc 8.7.3
+	* Optimize output file naming for file/vcd encodings. Based on a patch by Jouni Suorsa
+	* Added support for the dsize video filter
+	* Added support for VBR audio encoding when using FAAC or neroAacEnc as encoder. This
+	  automatically disables target file size calculation until I find out how to map
+	  quality values to bitrates for these codecs
+
+2009-02-14 - h264enc 8.7.2
+	* Rewrote and simplified the video_denoise_func() function. Merged the presets with
+	  the denoise filters
+	* Added two Archos 5 presets (ar5 and ar5hq)
+	* Removed unused global_header variable from h264enc and the preset.cfg file
+	* Add audio meta-data info for the MKV container when using aac, mp3, ac3 or vorbis audio
+	* Revert back to the old crop detection method for DVDs as it was more precise in some
+	  cases than the currently used one. This forces the video codec during crop detection to
+	  mpeg12 instead of ffmpeg2 as the -sstep option doesn't play nice with ffmpeg2
+	* Updated the man page
+
+2009-02-02 - h264enc 8.7.1
+	* Use keyint_min of 2 instead of 1 for the Blu-ray/AVCHD presets to prevent consecutive
+          IDR frames
+	* Added -loop 1 to MPlayer to prevent infinite looping if user has set -loop 0 in
+	  MPlayer's config file. Suggested by Jan Paral (Dept. of Physics, Univ. of Alberta, Canada)
+
+2009-01-20 - h264enc 8.7.0
+	* Added support for setting the position of the expand filer when scaling is used.
+	  The user can now choose to place it before or after the scale filter. Previously
+	  the expand filter was always placed after the scale filter which is not optimal
+	  in certain cases
+	* Small improvement/fix: when encoding two audio tracks to HE-AAC audio and muxing
+	  them into MKV, mkvmerge uses for both tracks the same track ID (1) while h264enc
+	  assumes that the second track uses track ID 2 which is wrong so the option
+	  --aac-is-sbr 2:1 is incorrect here and should actually be --aac-is-sbr 1:1 for
+	  the second audio track
+
+2009-01-16 - h264enc 8.6.9
+	* Add title/movie name to MKV and OGM as meta-info. The title is taken from the
+	  output name provided by the user. For directory encodings, this will be skipped
+	* Add audio codec and audio language meta-info to MKV when encoding DVDs and copying
+	  the audio track(s). Requested by Quentin Jackson
+	* Added support for the expand video filter
+	* Slightly improved info when the script is called without any parameters
+	* Implemented denoising presets for the 'tn' temporal denoiser
+	* Merge the mp3, aac, ac3 exporting code with the ffac3 and ffdts one since it's the same
+	  for the second audio track
+
+2009-01-14 - h264enc 8.6.8
+	* Calculate and display the amount of frames when scanning a video file.
+	  Also display seconds in addition to minutes for the runtime
+	* Replaced MB and GB with MiB and GiB
+	* Updates to the hq, vhq, ehq, ihq, ani and anihq presets: lower b-frames from
+	  16 to 5 for the hq, ani and anihq, from 16 to 6 for the vhq, from 16 to 7 for
+	  the ehq and from 16 to 8 for the ihq presets and use b_adapt=2 instead of b_adapt=1
+	  These changes increase encoding time a bit but are worth it quality-wise
+	* Updated QP range, add 0 for lossless mode
+
+2009-01-04 - h264enc 8.6.7
+	* Added two AVCHD presets (avchd and avchdhq)
+	* Removed tsMuxeR options insertSEI, contSPS and --vbv-len when using the Blu-ray
+	  and AVCDHD presets
+	* Use 'source' instead of '.' for importing files into the script. Makes it easier
+	  for me to read when my eyes are tired
+	* Moved the CONFIGDIR variable to the configuration file. This allows the user
+	  to set a custom temporary directory for storing temp files for encoding/remuxing.
+	  If the variable is unset in the config file, h264enc defaults to $HOME/.h264enc/h264enc_<PID>
+	  This change updates the config file to version 3. Requested by Matyas Sustik
+	* Improvements to the audio_resample_func() function. Automatically detect
+	  the audio sample rate of the content and display it. Also, moved the resample
+	  filters into a function called audio_resample_filters_func(). This change allows
+	  for comparing the detected with the selected sample rate and if both are the same,
+	  resampling will be skipped
+	* For directory encodings, offer an option to automatically delete the AVI file after
+	  remuxing to the other containers. This can considerably reduce disk space usage,
+	  especially when encoding a directory with a lot of files in it.
+	* Replaced all 'tail -1' commands with 'tail -n 1' since 'tail -1' is made obsolete as
+	  stated by the info page of tail
+	* Lowered psy trellis by 0.1 for all presets that use it. Seems 0.3 can cause weak
+	  mosquito noise on some content, even at such low values
+	* Use a weak AQ strength of 0.5 for the anime presets to reduce blocking in dark areas
+	* Added -channels option when scanning a video file for its audio properties
+	* Updated the man page
+
+2008-12-12 - h264enc 8.6.6
+	* Added support for the software equalizer video filter (eq2)
+	* Removed signal SIGTSTP from the trap list. The user can now suspend the encoding
+	  process with CTRL+Z and continue later on by typing fg in the terminal
+	* Small loop modifications in the video_subtitles_func() function
+	* Set default AAC profile when using neroAacEnc to LC instead of HE
+	* Added support for VCD/SVCD encodings. Yeah, yeah (S)VCD is crap and old but
+	  nevertheless I'll support it. It's a small change to the codebase of h264enc anyways
+	* Add option -ipod to the MP4Box muxing parameters. This removes the need of running
+	  MP4Box again after muxing just to rewrite the file for the iPod/iPhone
+	* Added a condition to check if MP4Box is compiled with the PSP patch and if so,
+	  the -psp option will be added to the parameters when using the Sony PSP presets.
+	  The PSP patch along with install instructions can be downloaded from h264enc's
+	  site at http://h264enc.sourceforge.net/download.html
+	* Small loop modifications to the get_dvd_devices_func() function
+	* Small modifications to the install script
+	* Updated the man page
+
+2008-12-06 - h264enc 8.6.5
+	* Huge bugfix to the audio part of the portable device presets. Variable audiocodec2
+	  was missing resulting in the second audio track being ignored. Everyone who uses
+	  these presets and wants a second audio track should upgrade ASAP
+	* Offer nosound audio option for the portable device presets
+	* Don't exit if the user has not added the .avi extension for the output file.
+	  Instead automatically add the extension to it
+
+2008-12-05 - h264enc 8.6.4
+	* Request from yeye69: add three VDPAU/DXVA presets (vdhq, vdehq and vdihq)
+	* Changed b_adapt=1 to b_adapt=2 for all presets that use 6 b-frames or less
+	* Improved dealing with LPCM audio on DVDs. If the user has selected to encode
+	  a second audio track and that track uses LPCM as audio, the encoding will fail
+	  since -oac copy will not be able to copy LPCM in AVI. For this reason, h264enc
+	  will check to see if the second audio track is LPCM audio and will use -oac pcm
+	  instead of -oac copy
+	* DVD channels settings can be now independently controlled for each audio track
+	* Added support for AC3 in MP4. This requires latest gpac version 0.4.5 compiled
+	  with liba52 support!
+	* Disabled AQ for the anime presets
+	* Updated the man page
+
+2008-12-03 - h264enc 8.6.3
+	* Small bugfix: IVTC/Telecine was still asked if user has selected to do
+	  FPS conversion using frame duplication (25 -> 50 fps, 50 -> 100 fps).
+	  This is due to wrong variable being tested: $fpsfilter instead of $frc
+	* Use MEncoder to dump the video when remuxing to MP4 as MP4Box can crap
+	  out in certain cases. I'm tired of fixing MP4Box' problems :/ but the
+	  alternative (mp4creator) is a piece of crap too and is no longer maintained
+	  It doesn't support VobSub subtitles either, nor chapter files AFAIK
+	* Made the Insane High Quality (IHQ) preset more insane. The IHQ preset is my baby
+	  so it gets very special treatment, haha! Increased frameref from 8 to 16,
+	  increased me_range from 64 to 128, enabled all partitions instead of using
+	  only p8x8,b8x8,i8x8,i4x4 and set trellis to 2. I hope the Japs are happy now :D
+	* Added support for providing a custom factor value when using the video bitrate
+	  calculation formulas
+	* Added initial support for a second audio track for DVD encodings. Below is a
+	  list of what currently works and what doesn't:
+	      * PCM audio is not supported yet. It's not a priority for me
+	      * If you're looking for second audio track in AVI, don't waste your time.
+	        I will never support it. Use the MKV/MP4/TS/OGM containers
+	      * Audio filters are supported for both tracks
+	      * Audio codecs and audio filters apply to both tracks. One can't
+	        use, for example, Vorbis audio for first and AAC audio for second
+	        track. One also can't set audio bitrate independently for each track
+	      * Audio stream copy is supported by the MKV/TS/OGM containers. For the
+	        MKV/TS containers one can copy AC3 + AC3 or AC3 + DTS audio. For OGM
+	        only AC3 + AC3 is supported since it knows nothing about DTS audio.
+	        If DTS audio is selected, it will be ignored
+	      * I use (very?) dirty tricks to maintain A/V sync when one uses frame
+	        altering video filters, like bobbing, interlacing, ivtc/telecine,
+	        FPS conversion
+	* Updated the video bitrate calculation code to support a second audio track
+	* Updated the MKV/MP4/TS/OGM containers code to support a second audio track
+	* Better explanation about what the -r option does/is used for
+	* Implemented audio_exit_func() function. This function kicks in effect if the
+	  audio encoding with an external audio encoder didn't succeed. If this is the
+	  case, the function will be called with the appropriate parameters and will force
+	  an exit to prevent container conversion. This is because if the audio encoding
+	  fails for some reason, container conversion will automatically fail too since
+	  the muxing programs will complain about the missing audio file and will exit,
+	  thus there is no point in continuing and displaying conversion failing messages
+	* Reduced the amount of options displayed when one calls the script without any
+	  parameters. From now on it will just display:
+	  Usage: h264enc <options>
+	  Use 'h264enc -help' for more information
+	* Better wording in the preset.cfg skeleton file
+	* Some old comments cleanups
+	* Updated the man page
+
+2008-11-29 - h264enc 8.6.2
+	* Replaced the -fq option by -qp and -crf for consistency with x264
+	* Replaced --help with -help for consistency with the other options
+	* Added support for importing up to three subtitles (VobSub or SRT) into
+	  the MKV/MP4 containers when encoding a video file or a directory with
+	  files. Also hardcoding a subtitle is now possible for directory encodings
+	* Lots of empty variables and code cleanups
+	* Reduced a lot of code duplication in the batch exporting code by using
+	  only one variable to carry the output file
+	* Optimized the MKV/MP4/OGM/TS/Blu-ray muxing code for directory encodings
+	* Simplified the MKV/MP4 subtitles importing code. The new code is a bit
+	  ugly, but is much smaller and works quite well. It's basically a small loop
+	  which tests the subtitle variables for not being empty, and if so, it appends
+	  the values to the MKVSUBS/MP4SUBS variables
+	* When encoding to neroAAC/AAC+/Vorbis audio and muxing to MKV, take the
+	  video directry from the AVI file instead of dumping it to disk. That
+	  way we can skip the dumping process and don't have to pass the FPS value
+	  of the raw video to mkvmerge since it takes it directly from the AVI. This
+	  also makes the code a bit more simple. When also muxing to MP4, MP4Box always
+	  dumps the video so we're safe here. Same thing for the TS container
+	* Added support for detecting the audio codec of the video file/DVD when
+	  using audio stream copy. Based on the detected audio codec, decision is made
+	  if we allow or disallow muxing to MKV/MP4/TS/OGM
+	* Updated the man page
+	
+	* Also today is h264enc's second public anniversary. On the 29th of November
+	  2006, I released the first version (version 1.5) on SourceForge. Since then,
+	  h264enc has developed from a primitive and limited shell script to something
+	  more mature. When I looked back at the old code of version 1.5, I really had
+	  to laugh and wonder at the same time. I did a lot of stupid things back then
+
+2008-11-25 - h264enc 8.6.1
+	* Empty variables cleanups
+	* Bugfix: the vobsubout3 variable was not tested in the MKV/MP4 muxing code.
+	  This leads to the third subtitle not being imported into these containers
+	* Added support for TS/Blu-ray muxing when batch encoding files in a directory
+	* Small improvements for batch encoding of video files in a directory
+	* New formulas to calculate the video bitrate for a target filesize. The user
+	  can choose between MeGUI's formula, h264enc's refactored MeGUI formula and
+	  the old h264enc/ripdvd formula
+
+2008-11-23 - h264enc 8.6.0
+	* Bugfix: add the $ofps variable to MEncoder when dumping a second subtitle.
+	  Also enable pcm as audio to maintain sync with the video. A small
+	  performance hit but it's worth it
+	* Added support for dumping one more subtitle. This brings it to a total
+	  of 3 subtitles that can be dumped to disk and imported into the MKV
+	  and/or MP4 container
+	* Dramatically simplified the TS/Blu-ray muxing code
+	* Implemented initial real batch support for files. As of now, one can encode
+	  a bunch of video files in a directory and automatically remux them to
+	  MKV/MP4/OGM. The TS container is not supported yet due to me being
+	  lazy. The user only needs to configure one of the files in a given
+	  directory, and all the settings will apply to the other files as well
+	* Moved the DVD device detection code into its own function to reduce
+	  some code duplication
+	* Made the encoding priority level global. It now applies to audio/video
+	  dumping, audio encoding, subtitles dumping and container muxing
+
+2008-11-20 - h264enc 8.5.9
+	* Rewrote the DVD part of the video_subtitles_func() function. It now
+	  supports dumping two subtitles to disk
+	* Updated the MP4/MKV muxing code to support importing of two subtitles
+	* Dramatically simplified the MP4/MKV/OGM batch exporting code. This
+	  reduces a lot of code duplication
+	* Bugfix in the video_subtitles_func() function for SRT subtitles for
+	  video files. Wrong variable used
+	* When encoding samples, make sure to take care of any subtitles that
+	  might have been dumped to disk
+	* Don't exit if the user provides a floating point value for the Vorbis
+	  audio codec. Instead warn and use the default value.
+	* New formula to calculate the video bitrate for a target filesize. The
+	  previous formula, which was directly taken from the ripdvd project,
+	  incorrectly calculates the bitrate which often results by missing the
+	  target filesize by as much as 30 MB. The new formula also uses floating
+	  point precision and has been tested agains the calculators of MeGUI and
+	  Avidemux
+	* Removed support for me-prepass
+	* Removed neroAacEnc quality-based encoding mode. It is incompatible with
+	  video bitrate calculation for a target size and I cannot find any info
+	  on quality -> average bitrate mappings.
+	* Updated the HW compatible presets. Changed H.264 Level for the SD presets
+	  from 3.1 to 3.0 and for the HD presets from 4.1 to 4.0. Also updated the
+	  vbv_maxrate values according to Level specs
+	* Restructured the Blu-ray presets. Now there are four different Blu-ray
+	  presets available: bd40, bdhq40, bd41, bdhq41. bd40 is Main profile
+	  @ Level 4.0, bdhq40 is High profile @ Level 4.0, bd41 is Main profile
+	  @ Level 4.1 and bdhq41 is High profile @ Level 4.1
+	* Allow CRF encoding to be used with some device presets (ps3, xbox360, appletv)
+	* Updated the man page
+	* Some cleanups
+
+2008-11-10 - h264enc 8.5.8
+	* Added support for the aacplusenc AAC+ audio encoder from Matteo Croce
+	* Updated the MP4 & MKV batch exporting and muxing code to support
+	  the aacplusenc encoder
+	* Display elapsed time when encoding samples
+	* Added NAL HRD to the Blu-ray presets. This requires a patched x264
+	  with the NAL HRD patch. The patch along with install instructions
+	  can be downloaded from http://h264enc.sourceforge.net/download.html
+	* Added option nal_hrd to the 'preset.cfg' skeleton file
+	* In some cases it is possible for h264enc to leave its unique temp directory.
+	  Find those directories and remove them if they are 15 or more days old
+	* Added support for deinterlacing at half frame rate. Useful for interlaced
+	  content that's running at 50 or 59.940 fps (100i/120i)
+	* Updated the source_fps_func() function
+	* Removed support for the MP2, WMA and ADPCM audio codecs. No one uses
+	  these codecs in combination with H.264 video
+	* Removed support for MPEG-2 AAC audio
+	* Reduced some code duplication in the set_output_filename_func() function
+	  by moving path and extension checking into its own function
+	* SSIM and PSNR statistics are now enabled by default
+	* Removed the noise filter. No real use for it
+	* Updated the audio_resample_func() function
+	* Updated the check_audio_codec_func() function
+	* Updated the genconfig_func() function
+	* Updated the man page
+	* Updated the README.h264enc file
+
+2008-10-28 - h264enc 8.5.7
+	* Improved DVD handling. Now there's a menu where the user can select
+	  the input type: ISO image, VIDEO_TS folder or DVD drive
+	* Presets updates: updated the b_adapt option. It supports parameters.
+	  Also updated the standard presets to use level 4.1 instead of 5.1
+	  and enabled psy_rd (psychovisual optimization) for all presets that
+	  use subq 6 or higher
+	* Added two Archos 605 presets (ar and arhq). The presets are directly
+	  lifted from AutoMKV (thanks buzzqw) but are a bit modified to get a
+	  somewhat higher quality
+	* Added two Blackberry 9000 presets (bb and bbhq)
+	* Added two Blu-ray presets (bd and bdhq). When using these presets,
+	  h264enc can create a Blu-ray disc structure if tsMuxeR is available
+	  on the user's system. Latest tsMuxeR version for Linux is 1.7.3(b)
+	  which has a bug when creating a Blu-ray structure. h264enc has a
+	  workaround for this
+	* Added access unit delimiters (aud) for the PS3, Blu-ray and HW compatible
+	  presets
+	* Set the field order of the tfields filter to auto detection
+	* Bugfix: when using the presets for the iPod/iPhone, h264enc didn't set
+	  the SAR to 1:1 when remuxing to MP4. Bug was introduced due to renaming
+	  of the portable device presets
+	* Removed AAC object type complexity menu. AAC (FAAC) is best used in
+	  low complexity mode
+	* Small improvement to the TS container code. Always write the FPS value
+	  to the meta file when muxing to TS. Also use mencoder/mplayer instead
+	  of MP4Box to extract video and audio
+	* Added extra strong denoising preset for the denoise3d & hqdn3d filters
+	* Implemented configuration file support. As of this version, h264enc
+	  automatically generates a config file in its configuration directory.
+	  The config file can be used by the user to modify/set the paths to
+	  various programs. This can be useful if the user has multiple
+	  executables of the same program(s) but wants to use a specific one
+	  for the job. It can also be used to set the correct path to a program
+	  if the program in question is not located in a standard location and
+	  cannot be found by the system. The configuration file cannot be used
+	  to store encoding settings or other parameters! It is only meant for
+	  the tools needed for the correct operation of h264enc. The config
+	  file will be generated in /home/user_name/.h264enc/config. The config
+	  file has its own versioning system and will be automatically updated
+	  in case something changes in future versions of h264enc
+	* Added -r option to reset the config file in case the user has made any
+	  changes to it and wants to restore the original values of the config file
+	* Updated the man page
+
+2008-10-19 - h264enc 8.5.6
+	* Updated the 'preset.cfg' skeleton file. Added support for psy_rd,
+	  Psychovisual optimization
+	* Improved subtitle handling for video file encodings. Now the user
+	  can select to hardcode a given subtitle into the movie or import
+	  it into the MP4 and/or MKV container. Only two subtitle formats
+	  are supported and have been tested: VobSub and SRT
+	* Added support for sample encoding and previewing. When encoding samples,
+	  one can specify the start position and the duration in seconds for
+	  the sample. Sample encoding respects encoding passes meaning if you execute
+	  h264enc in two-pass mode and want to encode a sample before the real
+	  encoding starts, then the sample will also be encoded in two-pass mode
+	  with all the options and filters selected by the user.
+	  Sample encoding can further be used to encode only specific parts of a
+	  video file or a DVD. In regards to DVDs, sample encoding does not respect
+	  selected DVD chapters meaning the given start position for the sample will
+	  overwrite the selected DVD chapter(s). This is a mencoder problem and
+	  there's nothing I can do about it.
+	* Presets update: most presets for portable devices have been renamed. Please
+	  read the man page or execute 'h264enc --help' for more information
+	* Added two QuickTime presets - qt and qthq
+	* denoise3d & hqdn3d: implemented weak/medium/strong denoising presets
+	* Removed quantization parameters for the spp, uspp, fspp and pp7 deblockers
+	* Updated the crop preview code. Instead of sleeping for 15 seconds and then
+	  killing the PID value of mplayer, use the -endpos option
+	* Updated the man page
+
+2008-10-16 - h264enc 8.5.5
+	* Presets updates: most presets have been updated to reflect the recent
+	  changes made to the subme system in libx264. The options 'bime' and 'brdo' have
+	  also been removed as they are no longer available as separate options in libx264.
+	  'bime' is automatically enabled if a preset uses subme >= 5, brdo has been
+	  included into the subme system. Please upgrade your libx264 to the latest
+	  version if you encounter problems when using the presets.
+	* Updated the 'preset.cfg' preset skeleton file
+	* Separated the 'normal' deinterlacers from the frame doubling ones
+	* More optimizations to the TS container code
+	* Disabled b_pyramid for the PS3 presets. Should increase compatibility
+	  with the PS3 a bit more
+	* Added Vorbis audio support for the OGM container
+	* denoise3d & hqdn3d: increased default denoising values to 3:2:3:2
+	* Removed path specification for MEncoder
+	* Cosmetics & cleanups
+
+2008-07-11 - h264enc 8.5.4
+	* Added support for DTS, MP3 and MP2 audio for the TS container
+	* Optimizations to the TS container batch exporting code
+	* iPod optimizations to the MP4 muxing code
+	* Enabled neroAAC and Vorbis audio support for the Matroska container
+	* Updated the audio part of the PS3 presets. Added audio copy support
+	  so a user can just copy the AC3 stream and later on mux it into a
+	  TS transport stream. Note that I'm not sure if the PS3 can play
+	  H.264 TS files since the PS3 doc only mentions MPEG2 TS and PS
+	* Added tsMuxeR options "insertSEI" and "contSPS" as default when muxing
+	  to the TS container
+	* Small tunings to the ps3vp preset. Made it main profile instead of
+	  high profile -> ps3hqvp is already high profile so no need for ps3vp
+	  to also be high profile
+	* Disabled weight_b for the anime presets. According to Dark Shikari (an
+	  x264 developer) it decreases the effectiveness of multiref while providing
+	  no benefit
+	* Do not ask for FPS conversion or pullup/pulldown if the user forces an
+	  output frame rate
+
+2008-07-07 - h264enc 8.5.3
+	* Feature request: add the possibility to disable MEncoder's A/V sync
+	  algorithm when encoding video files. This can be used to fix input
+	  video files with bad A/V sync in them, however there are no
+	  guarantees that this will actually fix the problem
+	* Added initial support for the TS container. This requires tsMuxeR and
+	  MP4Box (for audio/video dumps). When muxing to the TS container, only
+	  the FAAC AAC and AC3/copy audio codecs are supported. Read the README.h264enc
+	  which provides more information on where to get tsMuxeR.
+	* Updated the -sc option, added tsMuxeR to the list
+	* Enabled back the use of temporary directories based on process ID
+	  to store config files
+	* Fixed a bug in the check_audio_codec_func() function. Variable MENOCDER
+	  should be MENCODER
+	* Updated the requirements part in the README.h264enc file
+	* Small clean ups
+	* Updated the man page
+
+2008-07-05 - h264enc 8.5.2
+	* Feature request: add the possibility to specify the path to MEncoder.
+	  Useful if the user has two or more versions of MEncoder but wants to
+	  use a specific one for the encoding
+	* Check to see if destination directory is writable by writing a small
+	  file to it.
+	* Updated the README.h264enc file
+	* Updated the man page
+
+2008-07-03 - h264enc 8.5.1
+	* Added support for using the neroAacEnc AAC audio encoder when using
+	  the portable device presets icvp, ichqvp, ivp, ihqvp, ipvp, iphqvp,
+	  avp, ahqvp, nks60vp, nks60hqvp, pspvp, psphqvp, ps3vp, ps3hqvp, zvp,
+	  zhqvp, xvp and xhqvp
+	* Bugfix: when using the f9 or f9hq preset with the neroAAC audio codec,
+	  -oac pcm was not passed to the MEncoder options
+	* Changed default unsharp mask / gaussian blur matrix to chroma & luma 5x5
+	  as it provides a better balance than the 3x3 matrix
+
+2008-06-30 - h264enc 8.5.0
+	* Added support for using the neroAacEnc AAC audio encoder with
+	  LC, HE and HEv2 profiles
+	* Function renaming: aacplus_audio_func() -> neroaac_audio_func()
+	* Variable renaming: aacplusbr -> neroaacbr
+	* Audio codec renaming: AAC+ -> neroAAC
+
+2008-06-25 - h264enc 8.4.9
+	* Bugfix: don't leave config files upon user interrupt
+	* Removed reference to the Sonic audio codec in the -sc option as
+	  this codec is no longer supported
+
+2008-06-23 - h264enc 8.4.8
+	* Disabled the use of unique temporary directories to store temporary
+	  configuration files. This fixes an MP4Box crash on newer systems
+
+2008-06-18 - h264enc 8.4.7
+	* Added support for inclusion of external subtitles when encoding
+	  video files. The external subtitle will be hard coded into the
+	  encode
+	* Updated the man page
+
+2008-06-11 - h264enc 8.4.6
+	* Merged checking of the encoding modes for the specific presets
+	  that need it
+	* Removed the Black & White presets since they are useless and the
+	  only difference in them from the others is that they don't use
+	  chroma motion estimation
+	* Updated the man page
+	
+2008-06-04 - h264enc 8.4.5
+	* Fix for the sdb, sdm, sdh, hdb, hdm and hdh presets. These presets
+	  are only supported in 1-, 2-, or 3-pass mode since they use
+	  VBV maxrate and VBV bufsize with is not compatible with QP/CRF
+	  encoding modes
+
+2008-05-30 - h264enc 8.4.4
+	* Small menu enhancements to the FPS settings
+	* Fixed wrong explanation for the temporal denoiser
+	* Removed support for the Sonic and SonicLS audio codecs since
+	  they are experimental and far from complete for daily use
+	* Updated the man page
+	
+2008-04-28 - h264enc 8.4.3
+	* Clarify that the aspec ratio is the one for input sources
+	* Added MP4Box -ipod switch for the iPod/iPhone profiles
+	* Set the field order of the frame doubling yadif deinterlacer
+	  to auto detection
+	* Implemented source_fps_func() function to reduce code duplication.
+	  This function automatically detects the FPS of the content and is
+	  shared between the deinterlace and interlace functions
+	* Added support for applying denoising/deblocking on interlaced content.
+	  This is done by deinterleaving the content with the il=d filter, applying
+	  the denoising/deblocking on the deinterleaved content and interleaving it
+	  back with the il=i filter. That way we don't break the interlacing
+	* Color enhancements to the -bpp and -bpb options
+
+2008-04-25 - h264enc 8.4.2
+	* Fixed a problem where the detected resolution based on the crop values
+	  favored the values of the cropdetect filter instead of the user
+	  provided values. Reported by blaz from the Doom9 forum
+	* Renamed resolution variable 'res' to 'vres'
+	* Added support for doing 25 -> 50 fps and 29.970 -> 59.940 fps conversion
+	  using simple frame duplication
+	* Updated the man page
+
+2008-04-22 - h264enc 8.4.1
+	* Updated the keyframe auto detection
+	* Updated the audio_channels_func() function
+	* Updated the --help section
+	* Set the field dominance of the yadif deinterlacer to
+	  auto-detection. If the decoder doesn't export the field
+	  order, it defaults to TFF (top field first)
+	* Enabled multi-channel AAC audio for the Sony PS3 presets
+	* Small update to the FPS conversion menu
+	* Fixed a typo in the color() function
+	* Small menu enhancements to the video_interlace_func() function
+	* Added support for video bitrate calculation when using
+	  5 channels PCM audio
+	* Removed delay when exiting from user interrupt
+	* Updated the audio codecs menu
+	* Updated the README.encoding file
+
+2008-04-19 - h264enc 8.4.0
+	* Updated the filmdint FPS conversion filter. Added dint_thres=256 to
+	  not do any deinterlacing while doing the conversion
+	* Updated the man page
+
+2008-04-15 - h264enc 8.3.9
+	* Fixed the cropping code. NTSC content was problematic
+	* Added support for NTSC Double @ 60 fps
+
+2008-04-09 - h264enc 8.3.8
+	* Updated the cropping code to support the latest SVN version of MEncoder
+	* Replace underscores from DVD title names with spaces
+
+2008-04-08 - h264enc 8.3.7
+	* Integrated the exit command into the rmconf() function
+	* Added aq_metric for those who want to test the VAQ2 patch
+	* Updated the preset.cfg file. Added aq_metric
+	* Small clean ups
+
+2008-03-27 - h264enc 8.3.6
+	* Use awk to get the current device when exporting DVD chapters information
+	* When encoding specific chapters, append the chapters info at the end of
+	  the output file
+	* Changed the nkvp and nkhqvp presets to nks60vp and nks60hqvp
+	* Removed support for manual video codec configuration. This reduces the code
+	  and makes it less bloated. If a user wants to configure something manually,
+	  he can write his own custom preset and load it in h264enc
+	* Removed support for MP3 high- and lowpass frequency settings. I'm sure many people
+	  don't use these options and accept the defaults
+	* The threads option is now hard coded into the mencoder_opts() function
+	* Removed keyint and keyint_min from the HW compatible presets. Use the
+	  default detected values for those
+	* Updated the preset.cfg file
+	* Updated the README.h264enc file. Added links for neroAacEnc and Vorbis
+	* Removed SD/HD Extended presets. They are useless
+	* Updated the man page
+
+2008-03-23 - h264enc 8.3.5
+	* Use -vf rectangle=<crop_values> when previewing the crop values. Will
+	  give us a nice outline of the crop values
+	* Removed accurate rounding of the software scaler since it does not
+	  work on a lot of systems
+	* Updated the VAQ code to support the final version of the variance
+	  adaptive quantization patch -> replaced aq_sensitivity with aq_mode
+	* Updated the preset.cfg file to support the new VAQ
+	* Changed sample rate of the f9 and f9hq presets from 48000 Hz to 22050 Hz
+	* Be silent when doing FPS conversion
+
+2008-03-18 - h264enc 8.3.4.1
+	* Bugfix for the PSP presets. Multi-threading was not enabled
+
+2008-03-15 - h264enc 8.3.4
+	* Removed niceness from the muxing commands
+	* Clean ups to the batch exporting code
+	* Added -nocache mplayer option to the AAC+/Vorbis muxing/exporting code
+	* Disabled muxing to MKV if the user is using the AAC+ or Vorbis audio codec.
+	  The reason for this is that mkvmerge doesn't seem to honor the
+	  --default-duration flag when importing RAW h264 streams and will
+	  because of this generate files with major A/V sync issues. I've already
+	  filed a bug report. Until this is resolved I will not enable MKV muxing
+	  when using the AAC+ or Vorbis audio codec!
+	* Replaced an 'if' conditional with a 'case' one in the AAC+/Vorbis batch
+	  exporting code
+	* Updated the AUTHORS file. Added Harry Gunnarsson as bug reporter/testing
+
+2008-03-13 - h264enc 8.3.3
+	* Minor clean ups and code improvements
+	* Set default QP parameter to 0 for the spp, fspp and uspp
+	  postprocessing filters
+	* Added support for CBR AAC+ audio
+	* Made the CBR part of the audio codecs to be menu driven
+	* Fixed a bug where the FPS conversion menu and the Telecine/IVTC
+	  don't show up due to missing interlaced variable. Bug was introduced
+	  during the grouping of the pre/postprocessing video filters
+
+2008-03-10 - h264enc 8.3.2
+	* Pre/Postprocessing video filters are now grouped in one question
+	* Fixed a small bug. The Nokia S60 presets are not allowed in
+	  fixed-quant mode since they have maximum allowed bitrate
+	  restrictions
+	* Added autocompletion support. Patch by Nicolas Di Pietro
+	* Added a skip option to most of the menus
+	* Added support for AAC+ audio to the f9 and f9hq presets
+	* Clean ups in the audio codecs code
+	
+2008-03-08 - h264enc 8.3.1
+	* Added checking for oggenc and neroAacEnc to the -sc option
+	* Disabled the scalable sample rate option of the FAAC menu
+	  since it does not work. FAAC doesn't support HE-AAC
+	* Color optimizations
+	* Some minor code improvements
+	* Use named pipes (fifo) to encode to AAC+ or Vorbis audio. This
+	  eliminates the audio dumping step and the required disk space
+	* Updated the batch code to support named pipes
+
+2008-03-07 - h264enc 8.3.0
+	* Simplifications and clean ups in the audio codecs code
+	* More simplifications to the video bitrate calculation code
+	* Fixed identification of AAC+ in the matroska muxing code. Should be
+	  --aac-is-sbr 1:1 and not --aac-is-sbr 1
+	* Disable accurate rounding of the software scaler on 64-bit systems
+	  since MEncoder has issues with it
+	* Simplifications to the Matroska batch exporting code. This removes
+	  a lot of code duplication
+	* Only extract audio and video if we deal with the AAC+ or Vorbis
+	  audio codec
+	* Simplifications to the Matroska muxing code
+	* Major simplifications to the MP4 muxing code. A lot of code duplication
+	  is removed
+
+2008-03-06 - h264enc 8.2.9
+	* Video bitrate calculation: fixed the PCM part. It needs different
+	  bitrates for different audio channels. Resampling is not taken into
+	  account at the moment
+	* Added support for multichannel AAC+. Note that in VBR mode, you
+	  must use a value of 0.37 or lower or else neroAacEnc will error out
+	  with invalid SBR configuration!
+	* Added support for bitrate based ABR AAC+
+	* Added support for video bitrate calculation when using ABR AAC+
+	* Simplified the batch exporting code of the AAC+/Vorbis audio codecs.
+	  This removes code duplication
+	* Removed the MP4SBR variable in the batch code of the AAC+ audio
+	  codec. The value of this variable is now carried by the
+	  AUDIOFILE variable. Also did a few small simplifications to this part
+	* Added support for exporting the MP4 muxing commands to the batch file
+	  when using the NOSOUND audio option
+	* Updated the signal traps
+	* Replaced an 'if' conditional by a 'case' one in the video bitrate
+	  calculation code
+	* Random clean ups
+
+2008-03-05 - h264enc 8.2.8
+	* Merged the -sv option with -scan
+	* Fixed an issue when scanning video files, especially TS ones, where
+	  printing the video resolution could get misaligned
+	* Remove pointless removing of temp files. Since h264enc now uses
+	  unique temporary directories to store temp files, there's no
+	  point in removing them anymore as the unique directory will
+	  be removed upon user interrupt or user fault
+	* Added support for the HE-AAC (aka AAC+) audio codec. This requires
+	  neroAacEnc. When encoding to this codec, the AVI will be first encoded
+	  with PCM audio. Then both the video and audio will be extracted from
+	  the AVI, the audio will be encoded to AAC+ and will be muxed together
+	  with the video to the mp4 and/or mkv container. Multichannel AAC+
+	  audio is not supported yet as neroAacEnc for Linux doesn't seem to
+	  support it at the moment
+	* Added support for the Vorbis audio codec. This requires oggenc.
+	  Multichannel audio is supported
+	* Updated the batch code to support AAC+ and Vorbis audio
+	* Updated the README.h264enc file
+	* Updated the man page
+
+2008-03-04 - h264enc 8.2.7
+	* Added two Flash Player 9 presets (f9 and f9hq)
+	* Remove config directory on non-zero exit status
+	* Implemented -sv option which scans an input video file and displays
+	  information about it
+	* Some small code improvements
+	* Updated the man page
+
+2008-03-03 - h264enc 8.2.6
+	* Removed option 2, 3, 4 and 5 of the 60p -> 24p FPS conversion menu
+	  as these filter chains are not very reliable and often fail at doing
+	  the conversion. Also removed support for the decimate filter so now
+	  only framestep and filmdint are supported which give the best results
+	* Refined the filmdint filter parameters for 60p -> 24p FPS conversion
+	  and set default filter to filmdint=fast=0/io=60:24
+	* Bugfix: missing ':' in the vbv_bufsize variable of the psphqvp preset.
+	  Reported by Harry Gunnarsson
+
+2008-03-02 - h264enc 8.2.5
+	* Added support for 30p -> 24p FPS conversion
+	* Added support for the decimate filter when doing 60p -> 24p
+	  FPS conversion
+	* Small improvements to the crop preview code. Should come after
+	  the user has entered the crop values
+	* Video file encodings: Use unique default output file based on
+	  process ID
+	* Fixed a small bug where h264enc assumes that the $HOME/.h264enc
+	  directory already exists but that might not be the case, so it
+	  will fail at making an unique temporary directory. Reported by
+	  Nathaniel Gray
+	* Added support for setting the quantization parameter for the
+	  spp, uspp and fspp postprocessing filters
+
+2008-03-01 - h264enc 8.2.4
+	* Bugfix: forgot to add tinterlace before the detc filter for
+	  60p -> 24p FPS conversion
+	* Removed the '-p help' option as it is not very useful. --help
+	  displays everything one needs to know
+	* Added more 60p -> 24p FPS conversion filters and set default
+	  filter to framestep=2,filmdint=fast=0 which gives the best
+	  results
+	* Disabled colorspace conversion when interlacing, telecining or
+	  when doing FPS conversion as some of the filters (most?) don't
+	  like it. Also disabled colorspace conversion for the Nokia S60
+	  presets
+	* Made the script to use unique temporary directories to store
+	  the config/parsing files. That way, one can run multiple
+	  instances of h264enc at the same time without interference
+	* Modified the batch exporting code to work with unique
+	  directories
+	* Updated the man page
+
+2008-02-29 - h264enc 8.2.3
+	* Added support for doing 60p -> 30p, 60p -> 24p and 50p -> 25p
+	  FPS conversion. Useful for HD content that runs at 59.94 or 50 fps.
+	  This option is mutually exclusive with interlacing and frame doubling
+	  deinterlacing filters
+	* Added two Nokia S60 presets (nkvp and nkhqvp). Thanks to Matteo
+	  Croce (mp4tools) for the device info
+	* Colorized automatic actions/info/menus
+	* Fixed a small bug in the manual codec configuration where calculating
+	  of the keyint_min value fails
+	* Updated the man page
+
+2008-02-27 - h264enc 8.2.2
+	* Added support for calculating the video bitrate when encoding with
+	  the NOSOUND audio option
+	* Added support for calculating the video bitrate when using the
+	  PCM audio codec
+	* Converted the code for the bicubic software scaler parameters to
+	  be menu driven
+	* Added one 'Insane High Quality' preset (ihq) which uses the
+	  Hadamard-based motion estimation algorithm
+	* Enabled AAC audio support for the Matroska container. Please
+	  upgrade your mkvtoolnix to the latest SVN version!
+	* Notify the user that the frame rate will change when using the
+	  inverse telecine/telecine filters
+	* Clean ups in the MP4 muxing code
+	* Improvements to the batch exporting code
+	* Updated the man page
+
+2008-02-24 - h264enc 8.2.1
+	* Removed the 'user defined' option from the deint_custom_fps_func()
+	  function as it can confuse users who don't really know what to
+	  enter there
+	* Added support for different audio resampling modes
+	* Added support for the 'lavcresample' audio resample filter
+	* Made the audio_resample_func() function to be menu driven
+	* Converted the MKV/MP4/OGM code to base its decision on
+	  variable $audiocodec instead of variable $audcodec. Makes
+	  the code less complicated
+	* Updated the 'preset.cfg' file. Custom presets now support
+	  the following additional options: ratetol, vbv_maxrate, vbv_bufsize,
+	  vbv_init and cqm and me_prepass
+	* Preparations for the motion estimation prepass patch
+	* Added support for automatic detection of the video aspect
+	* Don't continue if MEncoder exits with a non-zero status
+	* Added two Black & White/Gray presets for BW movies (bw and bwhq)
+	* Small improvements to the custom_matrix_func() function
+	* Small improvements to the DVD titles scanning code
+	* Small improvements to the check_diskspace_func() function. Patch
+	  by Gunter Ohrner
+	* Updated the -sc option
+	* Variable renamings and clean ups
+	* Updated the man page
+
+2008-02-20 - h264enc 8.2.0
+	* Fixed a bug in the deint_custom_fps_func() function. Variable
+	  deintfsp for NTSC @ 59.94 fps should be deintfps
+	* Fixed a bug in option 8 of the $dfilter variable which was
+	  using a invalid underscore. Should be -field-dominance 1
+	  instead of -field_dominance 1
+	* Clean ups of old commented out code
+	* Reordered the deinterlacing menu. Separated the normal
+	  deinterlacers from the frame doubling ones
+	* Small improvements to the audio_channels_func() function
+	* Renamed variable $ss to $softscale
+	* Added two iPod Classic presets for iPods that support
+	  only H.264 @ Level 1.3 (icvp and ichqvp)
+	* Updated the README.h264enc file
+	* Updated the man page
+
+2008-02-18 - h264enc 8.1.9
+	* Updated the DVD chapters code to support the latest SVN version
+	  of MPlayer/MEncoder
+	* Small improvements to the cropping code
+	* Fall back to 'dd' for ISO dumps if 'pv' is not available on
+	  the user's system
+	* Set default noise pattern to be Luma + temporal instead of
+	  Luma & Chroma + temporal
+	* Added support for the lossless format of the Sonic audio codec
+	* Added the X-Men 3 matrix, Q matrix, Q2 matrix, Soulhunter V1
+	  matrix, Soulhunter V2 matrix, MP4Guy's low bitrate matrix, Audionut
+	  high bitrate matrix and Audionut general matrix to the package.
+	  Thanks to Audionut, MP4Guy and Soulhunter
+	* Bugfix: the ivtc/telecine process should check for the $deintfilter
+	  variable instead of the $deintfps one. ivtc/telecine is mutually
+	  exclusive with deinterlacing
+	* Improvements to the MP4 muxing part when exporting the options to
+	  the batch file. From now on, the FPS needed for MP4Box is directly
+	  taken from the AVI file. This approach is much more reliable and the
+	  user no longer needs to edit the FPS value for MP4Box when exporting
+	  the options of NTSC content to the batch file.
+	* Added one Anime high-quality preset (anihq)
+	* Updated the presets_keyint_func() function
+	* Added support for the Tfields deinterlacer @ original frame speed
+	  and Tfields + fast/medium/slow/slowest Mcdeint @ original frame speed
+	* Replaced a few 'if' conditionals with 'case' conditionals
+	* Updated the README.matrices file
+	* Typo fixes
+	* Updated the man page
+
+2008-02-14 - h264enc 8.1.8
+	* Export testing condition to the batch file for the output of MEncoder
+	  and for the output directory as well
+	* Changed FPS naming for Silent Speed to Silent Film
+	* Added support for automatic brightness/contrast control
+	* Bugfix: Only ask for deletion of the AVI file if the user has chosen
+	  to remux it to one of the supported containers
+	* Removed duplicate $quiet variable in the video_deinterlace_func()
+	  function when deinterlacing with a frame doubler
+	* Modified the -iso option to use 'pv' for DVD ISO dumping instead of
+	  'dd'. 'pv' provides us with a nice progress bar which is useful as
+	  it takes a long time to dump a DVD, so the user can follow the
+	  progress. 'dd' provides no such thing.
+	* Updated the -iso option to support dual-layer DVD discs (~8.54 GB)
+	* Added support for setting the subtitle alignment
+	* Added support for setting the subtitle Gaussian variance strength
+	  when hardcoding subtitles into the movie
+	* Use $IDXFILE variable for the MP4SUB and MKVSUB variables
+	* Tweaks to the HD presets. Increased VBV buffer size to 14475 and
+	  set keyint to 14 and keyint_min to 2 for the SD/HD presets. Also
+	  increased b-frames usage from 3 to 6
+	* Various small code improvements
+	* Updated the man page
+
+2008-02-12 - h264enc 8.1.7
+	* Bugfix: the manual in-loop deblock filter setting errors out due
+	  to wrong conditional check for a comma. Reported by Justin Poirier
+	* Added support for fast/medium/slow/slowest mcdeint combined
+	  with the Yadif and Tfields deinterlacers. This brings it to a total
+	  of 45 deinterlacing modes
+	* Implemented -iso option for dumping the DVD content with 'dd' to
+	  an ISO image to disk
+	* Added 'sleep 3' delay for the exported options
+	* Added one Anime preset (ani)
+	* Small tweaks to the NLQ and UHQ presets
+	* Made the deint_custom_fps_func() function to be menu driven
+	* Use detected FPS value in the bits_per_pixel_func() and
+	  bits_per_block_func() functions instead of falling back to 25
+	  if the user doesn't set/force the FPS value
+	* Replaced a few 'sed' commands with 'awk'
+	* Changed the -o option to -b to better reflect that this option
+	  is for batch encoding. Also default output file of the options
+	  file will be $HOME/batchfile
+	* Updated the FPS values for VFR Anime sources and Silent Speed films
+	* Variable renamings and code duplication clean ups
+	* Decreased VBV buffer size from 6000 to 5000 for the SD presets,
+	  frameref to 3 and B-Frames to 3 for the SD/HD presets
+	* Updated the AUTHORS file
+	* Updated the man page
+
+2008-02-09 - h264enc 8.1.6
+	* Added support for the OGM container
+	* Cosmetics: forgot to put a few 'echo' statements in the
+	  video_deblock_func() function
+	* Renamed presets hwpb, hwpe, hwpm and hwph to hdb, hde, hdm
+	  and hdh
+	* Added 4 stand-alone HW players SD presets @ L3.1 (sdb, sde
+	  sdm and sdh)
+	* Removed the 'hwcompat_preset.cfg' file as HW players presets
+	  are now hard coded in the script
+	* Made the call to the presets_keyint_func() function global
+	  instead of per preset based. This reduces code duplication
+	* Added the -tmp flag to the MP4Box commands to not run out of
+	  disk space in case of large files. Suggested by Henk Schoneveld
+	* Switched from trellis=2 to trellis=1 for the EHQ and UHQ
+	  presets as trellis=2 can kill detail quality since it overdecimates
+	  too strongly on the blocks. This should also speed up things a bit
+	* Improvements to the video_interlace_func() function
+	* Added the -field-dominance flag to the MEncoder parameters for
+	  deinterlacers that support setting the field order
+	* Changed variable $df to $dfilter
+	* Disabled exporting the MP4 muxing commands to the options file
+	  when using NOSOUND as the code base does not allow it
+	* Removed support for optimization of the MP4 file layout as
+	  the 'mpeg4ip' tools are no longer actively developed
+	* Fixed a typo in the deint_custom_fps_func() function
+	* Removed support for file splitting as the code/operation is
+	  not very reliable, especially with embedded subs in the MKV/MP4
+	  containers. Further, the code to support 4 containers is pretty
+	  large and unmanageable
+	* Small clean ups
+	* Updated the man page
+	* Updated the README.h264enc file
+	* Updated the README.encoding file
+
+2008-02-07 - h264enc 8.1.5
+	* Fixed a small bug. Don't ask for MKV conversion if using the
+	  Sonic audio codec as mkvmerge doesn't support it.
+	* Simplified the Matroska exporting code
+	* Added support for exporting the MP4 muxing commands to the
+	  options file.
+	* Added support for previewing the crop values for 15 seconds
+	* Renamed variable $audio_codec to $audcodec
+	* Simplified the MP4 muxing code a bit. Reduced a bit of code
+	  duplication
+	* Some improvements to the audio scanning menu
+	* Notify the user that the frame rate will change if he is
+	  interlacing progressive content
+	* Removed displaying "Checking for lsdvd..." every time the
+	  user chooses for DVD encoding
+	* Don't enable interlace-aware software scaler when telecining
+	  progressive content as the telecine filter comes after the
+	  scale filter
+	* Some clean ups
+
+2008-02-05 - h264enc 8.1.4
+	* Added vbv_maxrate=25000 and vbv_bufsize=9000 to the hwpb, hwpe,
+	  hwpm and hwph presets to fully conform to Level 4.1 for stand
+	  alone HW players
+	* Switched to bitrate rate control for the first pass in a 2- and
+	  3-pass encoding mode so we can get a better quant distribution
+	* Added support for adding noise to the encoding with the 'noise'
+	  video filter
+	* Updated the 'hwpcompat_preset.cfg' file
+	* Increased B-Frames usage with 2 for the standard presets
+	* Added support for exporting the Matroska muxing commands to the
+	  options file. User request from Harry Gunnarsson.
+	* Reordered the input frame rate selection menu of the video_interlace_func()
+	  function
+	* Added support for the Sonic audio codec
+	* Updated the man page
+
+2008-02-03 - h264enc 8.1.3
+	* Added support for deblocking-only of DVDs/video files with the
+	  ha/va filters
+	* Added 4 built-in stand-alone HW players presets (hwpb, hwpe, hwpm, hwph)
+	* Preparations for the upcoming Variance Adaptive Quantization (VAQ)
+	  The code is ready to use but is disabled and will stay so until
+	  the VAQ patch gets committed to SVN
+	* Made the custom FPS code for deinterlacing a function. This
+	  reduces code duplication
+	* Changed contact email address due to some issues with my current
+	  ISP provider
+	* Added support for setting/forceing the video aspec ratio
+	* Fixed a small bug in the manual configuration where setting the
+	  motion search range wasn't available when using 'tesa' motion
+	  estimation.
+	* Updated the AUTHORS file. Added Justin Poirier as bug reporter
+	* Updated the 'preset.cfg' skeleton preset file
+	* Updated the man page
+	* Clean ups
+
+2008-01-31 - h264enc 8.1.2.1
+	* Fixed a potential bug where MP4Box/mkvmerge can fail to parse
+	  the filename of the subtitle during importing
+
+2008-01-29 - h264enc 8.1.2
+	* Added support for deringing-only of DVDs/video files.
+	* Fixed a bug in the $threads variable in the manual codec
+	  configuration. Thanks to Justin Poirier for discovering and
+	  reporting this bug.
+	* Reset variable $aid when using the 'nosound' audio option.
+	* Added support for the new fullpel motion estimation hadamard-based
+	  'tesa' (SATD) algorithm presented in x264 revision r730.
+	* Switched to the new 'tesa' fullpell ME algorithm for the UHQ preset.
+	  Please upgrade your x264 program to revision r730 or higher if you
+	  intend to use this preset!
+	* Switched to the 'esa' fullpell ME algorithm for the EHQ preset.
+	* Updated the 'preset.cfg' skeleton preset file.
+	* Clean ups
+
+2008-01-24 - h264enc 8.1.1
+	* Bugfix: added a condition to check if the 'tfields' filter is used,
+	  and if so, to place it after the crop filter. The reason for this is
+	  that 'tfields' alters the resolution and if this filter comes before
+	  the crop filter, the crop values will no longer be correct so
+	  MEncoder will error out with a "crop area outside of the original"
+	  message.
+	* Implemented menu driven -scan option for DVD information. With
+	  -scan one can display extensive information about a DVD or
+	  can export the information to a file on disk in text, perl,
+	  python, ruby or xml format.
+	* Added support for auto-detection of the FPS value and setting it
+	  to double when deinterlacing with a frame doubling deinterlacer
+	* Added a note that NTSC FPS detection is not 100% reliable. This
+	  comes from the fact that h264enc only detects the FPS flag set
+	  in the video content but many NTSC DVDs "lie" about their true
+	  FPS value. And of course, the FPS won't be correct at all if we
+	  deal with soft telecined content.
+	* Removed partition type i8x8 from the LQ and VLQ presets as these
+	  presets don't use adaptive spatial transform (8x8dct) so i8x8
+	  does nothing there
+	* Enabled partition type i8x8 for the Sony PS3 presets
+	* Switched from partitions=all to partitions=p8x8,b8x8,i8x8,i4x4
+	  for the EHQ and UHQ presets. This removes support for the useless
+	  p4x4 partition type which provides almost no benefit in
+	  compresability and quality improvement and only slows down the
+	  encoding
+	* Updated the deinterlacing menu
+	* Added some extra comments to the aac_audio_func() function
+	* Added the -nocache option to MPlayer for faster execution
+	* Updated the signal traps
+	* Updated the man page
+
+2008-01-21 - h264enc 8.1.0
+	* Made the audio codec selection to be menu driven. Also set
+	  the default audio codec to be AAC instead of MP3.
+	* Made scanning for multiple audio streams in video files
+	  to be optional.
+	* Added back support for the old ha/va/dr postprocessing
+	  deblock/dering filters.
+	* Added support for interleaving even lines from even frames
+	  with odd lines from odd frames with the 'tinterlace' filter
+	  in mode 4
+	* Added support for the frame doubling 'tfields' temporal fields
+	  filter and 'tfields' + 'mcdeint'
+	* Enabled chrominance filtering for the temporal 'tn' denoiser
+	* Some small code improvements to the 'sed' parsing.
+	* Cleanups in the quality presets. Made the 2- and 3-pass
+	  $turbo variable to be global instead of per preset based.
+	  This reduces code duplication.
+	* Fixed a small bug when using user defined frame rate during
+	  the frame doubling deinterlacing process. Integer input values
+	  were not multiplied by 2. Also added a note that the provided
+	  FPS will be multiplied by 2
+
+2008-01-18 - h264enc 8.0.9
+	* Added support for user defined frame rate when using a
+	  deinterlacer which doubles the output frame rate.
+	* Bugfix: second pass in a three pass encoding mode cannot
+	  use CRF rate control. Thanks to Justin Poirier for reporting
+	  this bug.
+	* Fixed typo in the 'hwcompat_preset.cfg' file. Should be
+	  Decoded Picture Buffer and not Display Picture Buffer.
+
+2008-01-14 - h264enc 8.0.8
+	* Changed default (un)sharp mask/gaussian blur matrix to
+	  luma & chroma 7x7 as it provides a better balance than
+	  the 3x3 matrix.
+	* Added a tip for the 'denoise3d' and 'hqdn3d' filters that
+	  one can do only Spatial, only Temporal or Spatial and
+	  Temporal filtering with these filters. Spatial-only
+	  filtering is achieved by setting the last two values
+	  to 0, Temporal-only filtering is achieved by setting
+	  the first two values to 0. Spatial and Temporal filtering
+	  is achieved by using all values.
+	* Added support for adjusting the filter strength of the 'fspp'
+	  postprocessing filter.
+	* Added support for doubling the frame rate of the content
+	  during the deinterlacing process with the 'yadif' and 'mcdeint'
+	  filters.
+	* Added support for interlacing progressive 100 fps PAL and
+	  progressive 119.88 fps NTSC content.
+	* Updated the FPS code. Added support for PAL/SECAM/NTSC Quad
+	  (100 and 119.880 fps) and reordered the menu. Also disabled
+	  frame rate selection when interlacing progressive content or
+	  deinterlacing interlaced content with a deinterlace filter
+	  which doubles the output frame rate. Both actions are mutually
+	  exclusive with setting the output frame rate as the chosen
+	  interlace/deinterlace process will take care of the fps.
+	* Enabled x264 interlace-aware mode if the user is interlacing
+	  progressive content with the 'tinterlace' and 'phase' filters.
+	* Placed the interlace filters 'tinterlace' and 'phase' after
+	  the harddup filter so that duplicate frames will never get
+	  interlaced.
+	* Renamed variables $pullup, $telecine, $cropping, $colorspace,
+	  $ivtc_filter, $int_fps and $int_ofps to $ivtcfilter, $telecinefilter,
+	  $cropfilter, $colorspacefilter, $ivtcfilt, $intfps and $intofps
+
+2008-01-11 - h264enc 8.0.7
+	* Modifications to the output filename code. As of now, for
+	  DVD encodings, h264enc will scan the DVD for its title
+	  and will set the default output filename according to
+	  the title found on the DVD disc. If the DVD title is not
+	  found, h264enc defaults to the old method.
+	* Added two iPhone video profile presets (iPVP and iPHQVP)
+	* Bugfix: don't ask for colorspace conversion if the user
+	  doesn't scale the content. Colorspace conversion only works
+	  with the scale filter.
+	* Bugfix: revert using local variables in the bits_per_pixel_func()
+	  and bits_per_block_func() functions. Local variables don't
+	  work when a function is called inside another one.
+	* Some cleanups in the audio_resample_func() function.
+	* Moved the internal x264 denoise filter into the Denoise
+	  settings.
+	* Added support for the 'unsharp' (un)sharp mask/gaussian
+	  blur filter
+	* Removed the 'nr' variable from the 'preset.cfg' skeleton file
+	  as denoising is handled in the Denoise settings
+	* Added support for selecting the frame dropping mode of
+	  the inverse telecine 'detc' filter.
+	* Switched to ESA Motion Estimation for the UHQ preset. As
+	  of x264 revision r676 (2007-09-15), the ESA algorithm
+	  is made multi-threaded so there is no reason not to use
+	  it anymore. Also the current changes to ESA in x264
+	  revision r718 give it a 30% boost in speed over the
+	  previous implementation.
+	* Improvements to the DVD subtitle menu.
+	* Updated the man page.
+	
+2008-01-08 - h264enc 8.0.6
+	* Disabled b_pyramid for the PSP presets and enabled
+	  8x8dct for the PS3 and XBOX 360 presets
+	* Added two AppleTV video profile presets (AVP and AHQVP)
+	* Changed the audio sample rate to 48 kHz for the Zune
+	  video profile presets. Also enabled WMA audio and
+	  lifted MP3 CBR-only restrictions as the Zune supports
+	  CBR/VBR/ABR MP3 audio up to 320 kbps. The same goes for
+	  AAC-LC audio
+	* Use local variables inside the bits_per_pixel_func() and
+	  bits_per_block_func() functions
+	* Added support for yadif=2 deinterlacing mode which
+	  skips spatial interlacing checking
+	* Added support for interlacing of progressive content with
+	  the 'tinterlace' filter combined with 'phase'. Note
+	  that only 50 fps progressive PAL and 59.94 fps
+	  progressive NTSC content is supported! When interlacing
+	  such content, the frame rate will be dropped to 25 fps
+	  for PAL and 29.97 fps for NTSC
+	* AAC audio: don't exit if the user has provided a bitrate
+	  which is higher than the maximum allowed bitrate by
+	  some portable devices. Instead fall back to 128 kbps
+	* Colorspace conversion does not work with deinterlacing
+	  and interlacing filters so disable it if the user uses
+	  some of these filters. Also disabled colorspace conversion
+	  for the portable device presets (iPod, PSP, Zune)
+	* Improvements to the audio codecs code. Switched from
+	  the 'if' conditional to the 'case' conditional. Makes
+	  the code much easier to read/manage
+	* Changed variables $scaler, $iss, $ss_parameters and
+	  $accurate_vertical to $sws, $isws, $swsparam and $swsaccurate
+	* Changed the order of the video filters. The softskip
+	  filter should come after filters which need to see
+	  duplicate or skipped frames in order to operate correctly.
+	  This includes any filter that does temporal processing,
+	  like the temporal denoiser, hqdn3d/denoise3d/ow and all
+	  the inverse telecine filters. The softskip filter should
+	  also come before scaling so that the scale filter will be
+	  skipped if a frame is going to be dropped. Deinterlacing
+	  or pullup should be done before cropping. The harddup filter
+	  should be placed before the telecine one so that duplicate
+	  frames will never get telecined, we don't want that. The
+	  interlace filters should be placed after the softskip and
+	  scale filters and before the harddup filter.
+	* Updated the 'hwcompat_preset.cfg' preset file. Decreased
+	  frameref to 3 to not cause problems for some players.
+	  Also removed unneeded options, increased B-Frames usage
+	  to 10, increased me_range to 24 and added some extra
+	  comments
+	* Improvements to the DVD chapters exporting code. The user
+	  no longer needs to provide a path/filename to export the
+	  chapters to disk. As of now, the path and filename are
+	  automatically detected and set based on the provided output
+	  file name and path for the encoding
+	* Improved the chapters loading code for the MP4/MKV containers
+	* Some modifications to the 'sed' parsing
+	* Updated the man page
+	
+2008-01-05 - h264enc 8.0.5
+	* Added a 'hwcompat_preset.cfg' preset file which is
+	  compatible with stand-alone hardware players. If
+	  you plan to play your encoded content on a stand
+	  alone player, then you can load and use this
+	  preset with h264enc. Look in the 'doc' directory
+	  for it
+	* Added support for the Motion Compensating Deinterlacer
+	  (mcdeint) combined with Yadif
+	* Renamed variable $ilaced to $interlaced
+	* Increased B-Frames usage with 2 in the quality
+	  presets
+	* Disabled asking for custom matrices if the user uses
+	  the ulq, elq, vlq, lq, mq, nq and the nlq presets. As
+	  these presets are not High profile, they are not allowed
+	  to use custom matrices.
+	* Added support for setting the audio volume gain
+	  with the 'volume' filter
+	* Disabled automatic scanning of input video files
+	  to see if they hold up more than one video stream.
+	  Some MPEG-TS files can cause troubles for h264enc
+	  which will enter into an endless loop when scanning
+	  for multiple video streams
+	* Updated the man page
+
+2008-01-02 - h264enc 8.0.4
+	* Added support for loading a custom preset file.
+	  As of this version, the package includes a
+	  'preset.cfg' skeleton file which you can use as
+	  reference to write your own custom presets and
+	  load them with h264enc. Please read through the
+	  notes of the 'preset.cfg' file which is located
+	  in the doc directory.
+	* Added support for colorspace conversion during
+	  scaling
+	* Added support for the older 3D denoise filter
+	  (denoise3d)
+	* Added support for the Temporal Denoise filter (tn)
+	* Changed $use_threads variable to $threads
+	* Changed H.264's in-loop deblock variable from
+	  $deblockparam to $deblock
+	* Changed the video filters variables $denoise and
+	  $deblock to $denoisefilter and $deblockfilter
+	* Merged the $srate variable with the $resample
+	* Small improvements to the fps detection code
+	* Some cleanups/cosmetic changes
+	* Updated the AUTHORS file
+	* Updated the man page
+
+2007-12-23 - h264enc 8.0.3
+	* Added support for the Temporal Chroma Strength
+	  parameter in the hqdn3d denoise filter.
+	* Added support for the new Overcomplete Wavelet
+	  Denoise filter. This filter is very new and still
+	  not optimized so it is extremely processor intensive!
+	* Added two XBOX 360 video presets (xvp and xhqvp)
+	* Removed MP3 support for the Sony PSP presets as
+	  MP3 audio is not officially supported.
+	* Placed all video filters in a single variable called
+	  $videofilters. Since all filter settings are the same
+	  for all encoding passes, we place them in a single
+	  variable to reduce code duplication in the mencoder_opts()
+	  function. The same goes for the audio filters which
+	  are now carried by the $audiofilters variable. This
+	  also reduces filters maintenance for each pass.
+	* Optimized the options exporting code. Now if the user
+	  uses presets and wants to export the MEncoder options
+	  to a file, the default output name of the file will
+	  be h264enc-preset-outputname (where 'preset' is the chosen
+	  preset and 'outputname' is the name of the output file).
+	  If no presets are used, then the default output name of
+	  the file will be h264enc-options-outputname.
+	* Updated the man page.
+
+2007-12-22 - h264enc 8.0.2
+	* Added support for the spp, uspp, fspp and pp7
+	  postprocessing deblock filters. This removes support
+	  for the old 'pp' postprocessing filters and replaces
+	  them with the new and more efficient ones. It also
+	  fixes the nasty hack in the video_deinterlace_func()
+	  function and removes code duplication for DVD and video
+	  files in that function.
+	* Removed variables $yadif and $kerndeint as they are
+	  no longer required because of the changes above. All
+	  deinterlacing filters are now carried by the $deintfilter
+	  variable. Deblock/dering filters are carried by the
+	  $deblock variable.
+	* Added support for deringing/deblocking of DVDs. Although
+	  not really useful for most DVDs, in some rare cases it
+	  can be handy, like for custom made DVDs with a very
+	  low bitrate and blocking artifacts.
+	* Added support for denoising of input video files.
+	* Tuning to the NLQ preset
+	* Video functions reordering.
+	* Updated the README.h264enc file.
+	* Updated the man page.
+
+2007-12-21 - h264enc 8.0.1
+	* Changed contact email address
+	* Forced MPEG-4 in AAC audio for the iPod profiles
+	  as MPEG-2 is not compatible with the iPod devices
+	* Placed most of the audio codecs code into functions
+	  for easier integration in possible future video
+	  profiles for portable devices
+	* Included the Prestige matrix in the package which can
+	  be used on grainy sources
+	* Added two Sony PSP video profiles (pspvp and psphqvp)
+	* Added two Sony PS3 video profiles (ps3vp and ps3hqvp)
+	* Added two MS Zune video profiles (zvp and zhqvp)
+	* Added warning notification when using more than 4
+	  frame references as it can cause problems on stand-alone
+	  players and/or hardware accelerated video cards. This
+	  is only valid for HD 1080p resolutions (1920x1080)
+	* Added presets_keyint_func() function for the quality
+	  presets which automatically detects and sets the correct
+	  minimum and maximum keyframe intervals based on the chosen
+	  or detected FPS value
+	* Updated the man page
+	* Small cleanups
+
+2007-12-15 - h264enc 8.0.0
+	* Disabled asking for optimization of the MP4 file
+	  layout if the user has chosen to embed subtitles
+	  in the container. If optimization is ran on a
+	  MP4 file with embedded subtitles, the subtitles
+	  will all be black and unreadable
+	* Bugfix: moved the MP4 output variable before the
+	  optimization function as it is required by the
+	  function but won't be detected if it comes after
+	* Added a 'nice' value of 10 when remuxing to the
+	  MKV and the MP4 containers
+	* Merged the vobsubout and the vobsuboutindex variables
+
+2007-12-14 - h264enc 7.9.9
+	* Removed support for the old mkvmerge 1.x versions
+	* Added support for importing ripped VobSub subtitles
+	  into the Matroska and the MP4 container
+	* Improved the chapters loading code. Now spaces in
+	  file names are supported when importing a chapters file
+	* Added -sc switch for sanity check. This will check for
+	  the programs which are required for the correct operation
+	  of the script and it will print the status in a list.
+	  It will also display which audio codecs are supported
+	  by MEncoder.
+	* Some cleanups
+	* Updated the man page
+	
+2007-12-06 - h264enc 7.9.8
+	* Updated the M4G matrices
+	* Small tweaks to the HQ, VHQ, EHQ and UHQ presets
+	* User request: add support for subtitles for input
+	  video files. Useful if user wants to get the subtitles
+	  from a VOB file on disk
+	
+2007-12-01 - h264enc 7.9.7
+	* Added support for importing chapters information from
+	  a file when remuxing into the MP4 container.
+	* Changed default output name for the chapters file from
+	  'h264chapters' to 'h264chaps'
+	* Added destination directory checking when exporting
+	  DVD chapters to a file
+	
+2007-11-30 - h264enc 7.9.6
+	* Added support for exporting all chapters information
+	  from a DVD to a file. This requires 'dvdxchap' from
+	  'ogmtools'
+	* Added support for importing chapters information
+	  into the Matroska container when remuxing
+	
+2007-11-15 - h264enc 7.9.5
+	* Enabled MP2 audio support for the MP4 container
+	* Removed global_header from the iPod profiles as
+	  it crashes MP4Box
+	
+2007-11-12 - h264enc 7.9.4
+	* User request: Improved the DVD chapter code. Now each
+	  available chapter is displayed in a menu list together
+	  with its start position. This requires MPlayer 1.0rc2
+	  so please upgrade to use this feature!
+	* Some cleanups
+
+2007-11-07 - h264enc 7.9.3
+	* Added vbv_maxrate, vbv_bufsize and global_header to the
+	  x264 options for the iPod presets
+	* user request: when exporting the MEncoder parameters to
+	  a file, if the file already exists, do not overwrite it
+	  but just append the new parameters to it
+	* Increased the crop scanning from 15 to 30 frames for a
+	  better detection of the crop values
+	* Typo fix in the help section of the script
+	
+2007-10-26 - h264enc 7.9.2
+	* Added iPod High-Quality Video Profile preset (iHQVP)
+	* Tuning in the iPod Video Profile preset (iVP)
+	* Updated the man page
+	
+2007-10-25 - h264enc 7.9.1
+	* Added iPod Video Profile preset (user request). I cannot guarantee
+	  that this preset will work on all iPods as I do not have one to
+	  test with. Any feedback is welcome
+	* Modified the audio codec code to only allow AAC audio for the
+	  iPod preset
+	* Modified the video bitrate calculation for a target file size
+	  to support the iPod preset
+	* Set the audio resample filter to always use 48 kHz for the iPod
+	  preset
+	* Audio bitrate and video resolution checks for the iPod preset
+	  (audio may not exceed 160 kbps, resolution may not be higher
+	  than 640x480)
+	* Cleanups
+	* Updated the man page
+	
+2007-10-05 - h264enc 7.9.0
+	* Added support for loading of custom quantization matrices
+	  when using quality presets (user request)
+	
+2007-09-14 - h264enc 7.8.9
+	* Bugfix: wrong variable $VIDFP used in the bits_per_pixel_func
+	  function. Should be $VIDFPS or the function will error out
+	  when printing the BPP if user wants to calculate the video
+	  bitrate.
+	
+2007-08-31 - h264enc 7.8.8
+	* Disabled alias expansions in the shell, just in case it
+	  might interfere with aliases in the .bashrc file
+	* Added support for the FLAC audio codec (user request)
+	* Changed the way the -o option operates (user request)
+	* Updated the man page
+	
+2007-08-15 - h264enc 7.8.7
+	* Removed the audio surround filter in AC3 since it's
+	  not really useful and is only used on video files
+	  with matrix encoded audio
+	* Rewrote the audio_volnorm_func() function because of
+	  the changes made to the audio filter chain
+	* Added condition to check if any audio filters are used
+	  so we can add the -af option to the MEncoder parameters
+	* Added audio_channels_func() function for AC3, AAC, PCM
+	  and COPY
+	* Some small cleanups
+	* Manual codec config: trellis quantization requires CABAC
+	  so disable it if user doesn't use CABAC
+	* Some small tweaks to the quality presets; enabled RDO for
+	  B-Frames in the vhq preset
+	* Faster code to detect FPS values
+	* FPS: now both fractions (for Progressive NTSC/NTSC) and integer
+	  for (PAL/SECAM) are supported
+	* Changed Megabyte to Mebibyte in video bitrate calculation
+	
+2007-08-08 - h264enc 7.8.6
+	* Added the harddup filter at the end of the filter chain
+	  to further eliminate possible A/V sync problems when
+	  muxing to the MKV and/or MP4 containers
+	* Disabled the check_video_filters_func() function as it is
+	  made obsolete by the harddup filter since this filter will
+	  always be appended to the filter chain and the -vf option
+	  will always be required even if no other filters are used
+	* Added support for channel selection when using audio stream copy
+	* Manual codec config: disabled deadzones if user uses trellis
+	  quantization since they don't work with it
+	* Added support for encoding from a different DVD angle
+	* Now video bitrate calculation for a target file size works with
+	  audio stream copy
+	* Disabled asking for telecine/inverse telecine if content is PAL/SECAM
+	* Updated the man page
+	
+2007-08-05 - h264enc 7.8.5
+	* Fixed a potential problem in the inverse telecine/pullup code
+	  where A/V could get out of sync due to missing -fps 30000/1001
+	  value
+	* Enabled audio encoding for first pass in 2- and 3-pass mode.
+	  After extensive testings, without audio encoding for the
+	  first pass, MEncoder can break A/V sync, especially when
+	  doing a inverse telecine/pullup process where frame dropping
+	  and duplicate frames are involved.
+	* Squashed a bug in the subtitle code which hardcoded the
+	  subtitles into the movie even if user has selected to
+	  dump them to files on disk
+	* Added support for the DETC inverse telecine filter
+	* Added warning notification if resolution width and/or
+	  height is not divisible by 16 as compression will suffer
+	* Moved the call to the check_video_filters_func() function
+	  outside of the scaling section
+	* Only ask for telecine/inverse telecine filters if user doesn't use
+	  interlaced encoding as it is mutual exclusive with it
+	* Switched to turbo=2 for 2- and 3-pass modes when using quality presets
+	  as quality loss is almost unmeasurable compared to turbo=1
+	
+2007-07-30 - h264enc 7.8.4
+	* Added support for the Yadif deinterlacing filter
+	* Added support for Donald Graft's adaptive kernel deinterlacing filter
+	* Added support for Pulldown Reversal/Inverse Telecine. Please
+	  read the FAQ at http://h264enc.sourceforge.net on how and
+	  when to use these filters! Currently 3 filters are supported,
+	  the pullup, filmdint and ivtc filters
+	* Added support for Hard Telecine/3:2 Pulldown. Again read the
+	  FAQ on how and when to use it, if at all!
+	* Reverted back to fractions for FPS values. According to
+	  MPlayer's doc, integer/float should not be used anymore
+	  with MEncoder. This change also updates the bits_per_pixel_func(),
+	  bits_per_block_func() and keyframe variable
+	* Due to the high versioning, as of this version, h264enc will
+	  continue to use a microversion. When I started writing the script,
+	  I didn't think of going public with it so that's why versioning wasn't
+	  important...
+	* Updated the man page
+	
+2007-07-28 - h264enc 7.8.3
+	* Enabled turbo mode in first pass for 2- and 3-pass modes in the
+	  mq, nq, hq, vhq, ehq and uhq quality presets. This will speed
+	  up the first pass up to 3x withouth hurting the quality of the
+	  second or third pass.
+	* Changed QP to CRF for first pass in 2- and 3-pass encodings
+	  as CRF is much more efficient/intelligent than QP
+	
+2007-07-27 - h264enc 7.8.2
+	* Changed shell interpreter from /bin/sh to /bin/bash as there were some
+	  problems reported by Ubuntu/Debian users. Sorry for the inconvenience
+	
+2007-07-26 - h264enc 7.8.1
+	* Merged the -bpp and -bpb options
+	* Added bitrate calculation to the -bpp option which is based on the
+	  bits per pixel value
+	* Fixed a bug in the video bitrate calculation for a target file size.
+	  If user has chosen to encode a video file which has more than one video
+	  stream in it, and if the selected video stream for encoding is not the
+	  first one, the calculated bitrate will be wrong as the $vid variable was
+	  missing thus mplayer will get the length of the first video stream instead
+	  of the stream selected by the user
+	
+2007-07-25 - h264enc 7.8
+	* Updated the AAC part of the audio resample function. In addition to
+	  48000 and 96000 Hertz, AAC also supports 64000 and 88200 Hertz
+	* Some parenthesis changes
+	* Added support for optimizing the MP4 file layout with mp4creator.
+	  This is not a hard dependency! If mp4creator is missing, this option
+	  will be skipped. h264enc still uses MP4Box for MP4 muxing
+	* Changed the output FPS format to integer and float
+	* Updated the bits_per_pixel(), bits_per_block() and keyframe to support
+	  the new integer/float FPS format
+	* Disabled converting the final AVI to MKV if user has chosen to use the
+	  AAC audio codec. I've spoken to Moritz Bunkus, the author of mkvmerge,
+	  and he confirmed that at the moment he hasn't found a way yet to extract
+	  the AAC headers from AVIs so for the time being, it is not possible to
+	  convert AVIs with AAC audio to the Matroska container.
+	* Added backwards compatibility for mkvmerge versions < 2.0.0 which do not
+	  officially support H.264 video in AVIs unless forced with the
+	  '--engage allow_avc_in_vfw_mode' option
+	* Added support for input video files which contain more than one video stream.
+	  Note that cropping won't be auto-detected on any other stream except on the
+	  first one (stream 0) as MPlayer seems to have issues with the -sstep option
+	  and I still haven't got an answer from the developers on how to fix it
+	* Converted the get_filesize_func() function from integer to float for more
+	  accurate file size reportings
+	* Changed bitrate mode for first pass of 2-pass and first and second pass of
+	  3-pass encoding to use the QP constant instead of chosen bitrate. This may not
+	  be compatible with older versions of libx264, so please upgrate to a recent
+	  version if 2- or 3-pass errors out
+	* Updated the AUTHORS file
+	* Updated the man page
+	
+2007-07-20 - h264enc 7.7
+	* Implemented user_interrupt_func() function for when the user
+	  hits CTRL+C or CTRL+ALT+C
+	* Added support for displaying the DVD disc title
+	* Some improvements to the config directory code
+	* Some tweaks to the presets
+	* Updated the MKV conversion code. This requires at least
+	  version 2.0.2 of mkvmerge if you want to convert AVIs to MKV.
+	  mkvmerge 2.0.2 and up officially supports H.264 video in vfw AVIs
+	  and the option '--engage allow_avc_in_vfw_mode' is removed
+	* Changed default ABR AAC bitrate from 140 to 110 since AAC is much
+	  more efficient
+	* Implemented -bpp option for calculating the Bits Per Pixel values
+	  Many thanks to Aymeric for the help on this one
+	* Implemented -bpb option for calculating the Bits Per Block values
+	* Updated the man page
+	
+2007-07-13 - h264enc 7.6.1
+	* Fixed a bug in the bits_per_block_func() function. The formula was
+	  wrong which made this function display incorrect bpb values
+	* Fixed a typo in the man page
+	
+2007-07-12 - h264enc 7.6
+	* Fixed a typo in the help section - thanks to Adam for pointing out
+	* Added bits_per_block_func() function for calculating and displaying
+	  how many bits are used for each 16x16 macroblock
+	* Updated the MKV and MP4 container conversion code. Now user
+	  can convert the AVI to both formats, not just only one of them
+	* Complete rewrite of the file splitting code. Removed the 702 MB
+	  requirement before the split option kicks in. The new splitting
+	  code is much more flexible now despite of its large size. Now if
+	  user has chosen to convert the AVI to MKV or to MP4 or to both
+	  formats, he can choose which formats to split
+	* Updated the destination output checking code. Now this code respects
+	  user permissions and warns the user and exits if creation of the
+	  destination directory has failed
+	* Added support for dumping subtitles to a file on disk
+	* Added support for AAC object type complexity profiles
+	* Updated the AUTHORS file
+	* Updated the README.h264enc file
+
+2007-07-05 - h264enc 7.5
+	* Web site launched for h264enc at http://h264enc.sourceforge.net
+	* Fixed a small bug in the Matroska code
+	* Added bits_per_pixel_func() function for calculating and
+	  displaying the BPP value based on video bitrate, width,
+	  height and FPS
+	* More tuning to the presets
+	* Updated the man page
+	
+2007-07-04 - h264enc 7.4
+	* Added Near Lossless Quality (NLQ) preset. This preset is
+	  supported only in fixed-quant mode!
+	* Updated the man page
+	
+2007-07-02 - h264enc 7.3
+	* Fixed a severe bug in the MP4 muxing code. MP4Box by default
+	  falls back to 25 FPS for video content and doesn't do auto
+	  detection. If the input source has a different FPS value, like
+	  in NTSC or Prograssive Scan, not passing the correct value to
+	  MP4Box will result in severe audio/video desync.
+	* Moved global headers option inside the manual configuration
+	
+2007-07-01 - h264enc 7.2
+	* Fixed a bug in the audio_resample_func() which didn't recognize
+	  the WMA audio codec
+	* Added support for 96 kHz sampling for AAC audio to the
+	  audio_resample_func() function
+	* Added support for Multi-channel AAC audio encoding. Note that
+	  this can introduce bitrate variations into the audio stream so
+	  that video bitrate calculation for a target file size won't be
+	  very accurate!
+	* Added support for both MPEG formats supported by AAC audio
+	  (MPEG2 and MPEG4)
+	* Merged code of the WMAv1 and WMAv2 audio codecs into one
+	* Updated the man page
+	
+2007-06-28 - h264enc 7.1
+	* Added support for the WMAv1 and WMAv2 audio codecs. Note that
+	  this requires latest version of SVN MPlayer or MPlayer 1.0rc2
+	  as previous MPlayer versions do not support encoding to the
+	  above mentioned audio codecs.
+	* Updated the man page and README.h264enc file
+	
+2007-05-31 - h264enc 7.0
+	* Implemented '-p help' option for quick help on quality presets usage.
+	  Now user can use 'h264enc -p help' to get a quick help
+	  on presets and how to use them.
+	* Added one more quality preset (Normal Quality (NQ)) and changed
+	  recommended presets to 'nq' and 'hq' from 'mq' and 'hq'
+	* Added support for converting AVI's to the MP4 format.
+	  This requires MP4Box from gpac and only works with
+	  MP3/AAC audio or NOSOUND as MP4Box doesn't support
+	  the other audio codecs. User can only convert the final
+	  AVI if conversion to Matroska is not selected! (you can't
+	  do both)
+	* Added audio_codec_in_video_file_func() function. This function
+	  will only be used for input video file encodings and only
+	  if user wants to copy the audio (no re-encoding). It will scan
+	  the input video file for its audio codec and if it detects MP3
+	  or AAC audio, it will set a flag so that the user can convert the
+	  encode to MP4 afterwards (if he wants to). This will not work though
+	  if the input video file has more than 1 audio channel (like in mkv
+	  files) and the user has selected a audio channel other that the first one.
+	  It will also not work if input video file has no audio in it.
+	* Modified the file splitting code to support the MP4 format
+	* Added support for checking disk space left over in the destination output
+	  directory and the h264enc config directory. If < 4 GB then user
+	  will be warned that he's running out of disk space in one of the
+	  directories
+	* Removed obsolete checking for resolution format since
+	  the $scale variable translates it to the correct
+	  MEncoder format no matter if user uses a : or x for
+	  the resolution
+	* Decreased default difference threshold deblocking value for
+	  video files to 70 as a too high value can smear details too much
+	* Removed an extra "layer" of piping in variables. There's
+	  no need to "cat" a file and then pipe the output to "grep"
+	  to get a specific value from that file as "grep" can do
+	  it by itself. No need to do $(cat /path/to/file/file_name | grep "value")
+	  instead use $(grep "value" /path/to/file/file_name)
+	* Small cosmetic changes
+	* Updated the man page
+	
+2007-05-25 - h264enc 6.5
+	* Removed duplicate and long standing $turbo variable
+	  in the MEncoder parameters for 2- and 3-pass modes
+	* Added informant display_quality_preset_func() function
+	* Improved resolution code. Now if user has chosen to
+	  crop the input source, default resolution value will
+	  fall back to the visible resolution area after cropping,
+	  (eg, the left over area of the resolution after removing
+	  the black bands with the crop filter). If no cropping
+	  selected, default resolution value will be the original
+	  one from the input source
+	* Small tuning in the quality presets
+	* Added support for encoder priority settings ("nice" values)
+	* Fixed a small bug in the cropping function that will fail if
+	  user wants to crop a video file which contains spaces in its
+	  file name
+	* Updated the man page
+	
+2007-05-23 - h264enc 6.4
+	* Implemented 9 different video quality presets
+	* Updated the man page
+	
+2007-05-22 - h264enc 6.3
+	* Added support for displaying available devices
+	  from /proc/sys/dev/cdrom/info
+	* Added support for video file cropping
+	* Updated the audio resample function
+	
+2007-05-14 - h264enc 6.2
+	* Improvement in the DVD unlocking code
+	* Improvement in the chapter and subtitle scanning code
+	* Improvement in the DVD audio channel scanning code
+	* Improvement in the aspect ratio detecting code for MKV conversion
+	
+2007-05-08 - h264enc 6.1
+	* Added support for audio channel selection in video files
+	* Decreased internal scanning time point for FPS detection
+	* Updated the man page
+	
+2007-04-20 - h264enc 6.0
+	* Only check for lsdvd if user wants to encode a DVD
+	* Added support for AC3 Dynamic Range Compression
+	* Updated the man page
+	
+2007-04-06 - h264enc 5.9
+	* Updated the cropping and video bitrate calc code to support SVN MPlayer
+	* Updated detection of aspect ratio for mkvmerge to support SVN MPlayer
+	* Added Subpel Refinement Quality explanations
+	* Moved 'mixed framerefs' option after the 'frameref' one
+	* Moved check_video_filters_func()
+	* More cleanups
+
+2007-04-03 - h264enc 5.8
+	* Rewrote the DVD cropping code (more precise now)
+	* Removed the '-q' option of mkvmerge for more verbose output
+	* Small cleanups
+	
+2007-03-20 - h264enc 5.7
+	* Added basic support for muxing the final AVI file into 
+	  Matroska container (requires mkvmerge)
+	* Modified the splitting code to support the Matroska container
+	* Updated the man page
+	
+2007-03-18 - h264enc 5.6
+	* Further improvements to the options saving code
+	* Fixed a bug in the video bitrate calculation (missing $device variable)
+	* Small improvements to the DVD displaying code
+	* Moved passlog files to $CONFIGDIR
+
+2007-03-13 - h264enc 5.5
+	* Improvements to the options exporting code
+	* Fixed FPS detection for video files
+	* Implemented automatic video bitrate calculation based on
+	  target size, video length and chosen audio bitrate
+	* Updated the man page
+	
+2007-03-11 - h264enc 5.4
+	* Added support for displaying all DVD titles (user request)
+	* Added support for inspecting MEncoder options before encoding (user request)
+	* Added support for exporting all MEncoder options to a file
+	* Added support for loading script generated options from a file
+	  for debugging purposes
+	* Temporary files go to $HOME/.h264enc now instead of /tmp
+	* Updated the man page
+	
+2007-03-09 - h264enc 5.3
+	* Improvements to the threading code
+	* Added count function before encoding
+	* Compound command changes
+	
+2007-03-02 - h264enc 5.2
+	* Added support for thread encoding (useful for SMP/Multicore CPUs)
+	* Target directory checking and creation
+	* Small cleanups
+	
+2007-02-11 - h264enc 5.1
+	* Added more matrices from MP4Guy to the package
+	* Added MEncoder flags to options for more clarity
+	* Updated the man page
+	
+2007-02-06 - h264enc 5.0
+	* Added EQM-AVC-HR matrix file to the package
+	* Improved matrix loading code
+	* Improved DVD or video file checking
+	* Updated the man page
+	* Updated the install script
+	* Added README.matrix file
+	* Organized the package
+	
+2007-02-04 - h264enc 4.9
+	* Added support for auto-detecting frame rate value
+	* Overall small code improvements
+	
+2007-02-02 - h264enc 4.8
+	* Fixed a bug in the check_video_filters_func function
+	* Fixed a small bug where script leaves the resolution temp file after getting the values
+	* Added support for predefined/custom quantization matrices
+	* Added support for bypassing audio encoding (useful for muxing video into other containers
+	  and/or with other audio file)
+	* Improvements to the resolution detection code
+	
+2007-01-31 - h264enc 4.7
+	* Added support for auto resolution detection
+	* Added support to bypass scaling if user decides to use original source resolution
+	* Further improvements to the DVD title scanning and cropping code
+	* Improvements in the audio codec checking code (placed it into a function)
+	* Small improvements to the high-quality denoise filter code
+	* Small improvements to the default encoding values of the script
+	* Updated the man page
+	
+2007-01-30 - h264enc 4.6
+	* Added support for displaying all available DVD audio channels
+	* Added support for chapter scanning for the chosen DVD title
+	* More improvements to the DVD subtitle, title scanning and cropping detection
+	* Small improvements to the in-loop deblocking filter code
+	* Temporary files go to /tmp now instead of user's home directory
+	* Updated the man page
+	* Updated the README.h264enc file
+	
+2007-01-28 - h264enc 4.5
+	* Improved the DVD title scanning code (if DVD is locked, 'lsdvd' will fail to
+	  read it so mplayer must unlock the DVD before running 'lsdvd')
+	* Improved the subtitle code
+	* Added support for auto-detecting DVD cropping values
+	
+2007-01-27 - h264enc 4.4
+	* Added support for auto-selecting the longest DVD title using 'lsdvd'
+	* Added support for displaying available DVD subtitles
+	* Updated the README.h264enc file
+	* Updated the man page
+	
+2007-01-17 - h264enc 4.3
+	* Added support for 3-pass encodings
+	* Fixed a bug in 2-pass encoding mode (turbo variable was missing)
+	* Updated the man page
+	* Updated the README.encoding file
+	
+2007-01-15 - h264enc 4.2
+	* Added input/output file name checking for video file encodings
+	* Improved the output frame rate code
+	
+2007-01-10 - h264enc 4.1
+	* Fixed a bug where the device variable won't work if empty
+	
+2007-01-08 - h264enc 4.0
+	* Default min/max keyframe intervals are now auto-calculated from the output frame rate value
+	* Only ask for the internal H.264 noise reduction filter if user didn't use the default MEncoder filter
+	* Improved the output frame rate code
+	* Improved MEncoder/libx264 checking
+	* Fixed a typo in the help section
+	* Overall small improvements
+	* Updated the man page
+	* Updated the README.encoding file
+	
+2007-01-05 - h264enc 3.9
+	* Added support for difference and flatness deblocking thresholds
+	* Rewrote the output frame rate code (uses now video standard formats - PAL/SECAM/NTSC/Progressive NTSC)
+	* Changed default B-Frames value from 2 to 3
+	* Updated the man page
+	
+2007-01-04 - h264enc 3.8
+	* Improved the splitting section (only ask user for splitting if file size is > 702 MB)
+	* Added man page to the package
+	* Updated Copyright dates
+	* Updated the README.h264 file
+	* Updated the install script
+
+2006-12-22 - h264enc 3.7
+	* Moved the audio volume normalizing into a function
+	* Added support for both fixed-quant modes (QP and CRF)
+	
+2006-12-20 - h264enc 3.6
+	* Changed default format of output FPS to float
+	* Small overall improvements
+	
+2006-12-17 - h264enc 3.5
+	* Little code improvements for better error reporting
+	
+2006-12-15 - h264enc 3.4
+	* Added support for chroma quantizer offset
+	* Small code cleanups
+	
+2006-12-14 - h264enc 3.3
+	* Fixed a major bug in the MP3 filter config code where it won't work if
+	  user has chosen to resample the audio (-af was missing - the bug
+	  was introduced while fixing the code of the volnorm and resample filters)
+	* Changed default AAC quality to 200
+	* Updated the README.h264enc file
+	
+2006-12-14 - h264enc 3.2
+	* Fixed the volume normalizing filter (should come before the resample filter)
+	* Fixed the surround filter for video files (should come before the resample filter)
+	* Rewrote the MP3 code (much smaller and cleaner now)
+	* Added support for MP3 channel modes
+	* Added support for MP3 lowpass and highpass frequency filtering
+	* Updated the README.encoding file
+	
+2006-12-13 - h264enc 3.1
+	* Fixed a small bug in the RD B-Frames code where it was still used
+	  even if B-Frames were disabled
+	* Fixed a bug in the audio resample function where it won't work if
+	  user has chosen to use the AAC codec
+	* Added support for Adaptive PCM audio encoding (ADPCM)
+	* Enabled the volume normalizing audio filter to do precise calculations
+	* Added support for accurate rounding of the vertical software scaler
+	* Small improvements to the install script
+	* Updated the README.h264enc file
+	
+2006-12-12 - h264enc 3.0
+	* Fixed a bug in the deblocking settings where the 'deblock' option was used
+	  twice if user has chosen to tune the deblocking parameters of the filter
+	* Fixed a bug in the B-Frames code where B-Frames options/questions were
+	  still used/asked even if user has specified not to use B-Frames by providing
+	  0 when asked
+	* Added support for AAC audio encoding (Advanced Audio Coding)
+	* Small improvements to the install script
+	* Updated the README.h264enc file
+	
+2006-12-12 - h264enc 2.9
+	* Added support for displaying SSM statistics after encoding
+	
+2006-12-11 - h264enc 2.8
+	* Changed default AC3 bitrate to 192
+	* Small fixes/improvements all over the place
+	* Improvements to the install script
+	
+2006-12-09 - h264enc 2.7
+	* Added install/uninstall script
+	* Added info/encoding tips to the package (README.encoding)
+	* Little code cleanup
+	* Updated the README.h264enc file
+		
+2006-12-08 - h264enc 2.6
+	* Added support for tuning the software scalers
+	* Made the deinterlacing code a function (commonly shared between the 2 input sources)
+	* Updated the README file
+	
+2006-12-07 - h264enc 2.5
+	* Moved quantizer compression/temporal blur to a different place
+	* Small improvements to the splitting code
+	* Added support for advanced options for experienced users, which includes
+		- Bitrate tolerance
+		- VBV maximum bitrate
+		- VBV buffer size
+		- Initial buffer occupancy
+		- Inter luma quantization deadzone
+		- Intra luma quantization deadzone
+		- H.264 bitstream level
+		
+2006-12-07 - h264enc 2.4
+	* Changed default quantizer in fixed quant mode from 18 to 20
+	* Added support for Minimum Keyframe Intervals
+	* Updated the README file
+	
+2006-12-06 - h264enc 2.3
+	* Rewrote the file splitting code
+	* Various small improvements
+	
+2006-12-06 - h264enc 2.2
+	* Fixed default output name (was XviD.avi due to code sharing with the xvidenc script)
+	* Added checking if output file exists
+	
+2006-12-06 - h264enc 2.1
+	* Squashed a severe bug in the fixed quant selection code (qp_constant is replaced by qp in MEncoder)
+	* Quantizer compression only supported in 1- or 2-pass (what am I doing?)
+	* Added support for Quantizer stepping
+	* Added support for custom output file names
+	* Added initial support for splitting files using avisplit from transcode
+
+2006-12-05 - h264enc 2.0
+	* Fixed a typo in the cropping explanation text
+	* Added support for all subtitle anti-aliasing modes
+	* Changed default FPS value to 26000/1001 (25 FPS)
+	* Fixed the Quantizer compression code (only supported in ABR or 2-pass)
+	* Added support for AlphaC0 and Beta deblocking parameters
+	* Rewrote the denoise filter code
+	
+2006-12-04 - h264enc 1.9
+	* Removed checking for 'bc' and 'tr' from the code
+	  as they are no longer needed
+	* Added support for Scenecut
+	* Added support for I/P/B-Frames factors
+
+2006-12-04 - h264enc 1.8
+	* Fixed a bug in the resolution checking code
+	* Improved the cropping code
+	* Small code optimizations
+	
+2006-12-01 - h264enc 1.7
+	* Optimizations in 2-pass logfile code
+	* Added support for output FPS
+
+2006-11-29 - h264enc 1.6
+	* Initial public release

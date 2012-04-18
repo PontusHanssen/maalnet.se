@@ -1,0 +1,71 @@
+
+=================================================
+| h264enc - the interactive shell script ripper |
+=================================================
+
+1) Why a script?
+
+- Because GUI programs take a lot of time to write and debug/optimize
+- Because GUI programs eat more memory
+- Because GUI programs do nothing for 90% of the encoding process
+- Because scripts are a lot easier to read/write/debug
+- Because I love shell scripting :)
+
+2) Introduction
+
+h264enc is a shell script which can be used to encode DVDs or video files
+to the H.264 format, also known as AVC (Advanced Video Coding) or MPEG-4 Part 10,
+using the encoding utility 'MEncoder' from 'MPlayer'. There is also a Web site
+available for h264enc at http://h264enc.sourceforge.net
+
+The script supports all the useful options an end-user would need to make
+a successful encode. Things like software scaling, deblocking/deringing of
+video files, DVD deinterlacing, DVD cropping, DVD denoising, DVD subtitle
+inclusion, interlaced DVD encodings, and various audio codecs like MP3,
+AC3, AAC, AAC+, Vorbis, FLAC and PCM are supported as well.
+
+There's a man page which provides further info on the h264enc script.
+To access it after installation, open a console and type "man h264enc"
+without the quotes.
+
+Note: instead of typing 'n' every time you don't want to use a specific
+option, you can just hit enter.
+
+I also suggest to read the x264 part of the MPlayer man page so you
+can get more familiar with what a specific option does as most of the
+x264 options supported by this script may have a huge impact on
+quality/encoding speed.
+
+To obtain best performance, I suggest to download MPlayer and the
+libx264 library and compile them yourself. You should use the appropriate
+CFLAGS at compilation time to optimize the code for your hardware
+architecture (example: CFLAGS="-O3 march=athlon-xp mtune=athlon-xp
+-finline-functions -freorder-blocks -fexpensive-optimizations")
+
+For more info on the MPEG compression, read the 'README.encoding' file
+
+3) Requirements
+
+- MPlayer/MEncoder >= 1.0rc2 (http://www.mplayerhq.hu)
+- lsdvd (http://sourceforge.net/projects/lsdvd)
+- mkvtoolnix (http://bunkus.org/videotools/mkvtoolnix/)
+- gpac (http://gpac.sourceforge.net/)
+- ogmtools (http://www.bunkus.org/videotools/ogmtools/)
+- libx264 (ftp://ftp.videolan.org/pub/videolan/x264/snapshots)
+- LAME (http://www.mp3dev.org)
+- FAAC (http://www.audiocoding.com/)
+- neroAacEnc (http://www.nero.com/eng/down-ndaudio.php)
+- aacplusenc (http://teknoraver.net/software/mp4tools)
+- Vorbis (http://www.vorbis.com/setup_linux/)
+- FLAC (http://flac.sourceforge.net/)
+- Pipeviewer (http://sourceforge.net/projects/pipeviewer)
+- tsMuxeR (http://www.smlabs.net/tsmuxer_en.html)
+
+4) Installation
+
+Just run the 'install' script as root, or copy the
+h264enc script to a valid path (eg /home/your_username/bin)
+
+Note: this only applies if you have downloaded the
+compressed 'h264enc.tar.gz' package, not the RPM one
+

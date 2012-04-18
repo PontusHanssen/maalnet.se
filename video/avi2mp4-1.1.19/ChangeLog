@@ -1,0 +1,184 @@
+1.0.4:
+  - Fixed a typo in comments
+  - Start version history
+  - Changed FAAC_ENCOPTS comment
+  - Introduced $MFPS for accurate FPS
+  - Added '-noskip -mc 0' to mencoder calls
+  - Added check for frame rates greater than 30
+  - Added lock file
+  - Exit on error
+  - Set keyint/keyint_min
+  - Added note regarding MP4Box and filenames
+  - Wrote down requirements
+1.0.5:
+  - Small change to comments
+  - Use myidentify instead of midentify; now input pixel aspect ratio doesn't
+    have to be 1:1 anymore
+  - Function c; unset variables containing essential file properties and
+    continue
+  - Protect mplayer from input while extracting audio
+  - Removed AVI requirement; now any file is possible as input
+  - Added $VFOPTS variable
+1.0.6:
+  - Removed '-noskip -mc 0' again
+  - Changed "Usage: ..." info
+  - Added rough sketch about what the script does and what it can't do
+  - Added note about iPod import
+  - Print target bit rate and bits per pixel
+  - Unset LC_ALL and set LC_NUMERIC to POSIX to make sure we get dot instead of
+    comma as decimal separator as bc expects a dot
+1.0.7:
+  - Added a little enhancement to function c; ability to return to the n^th
+    enclosing loop
+  - Fixed two function c calls returning to the wrong loops
+1.0.8:
+  - Remove myidentify log when skipping file
+  - Use rm -f
+  - Added possibility to add options to mencoder calls through $MENCODER_OPTS
+1.0.9:
+  - In case aspect ratio is not set simply assume Width:Height
+  - Added -endpos .1 to myidentify to prevent playback of audio files; thanks to
+    Reimar Doeffinger for the tip
+  - Check $VFOPTS for cropping; if detected calculate new aspect ratio so we get
+    a proper output resolution
+1.1.0:
+  - Removed bogus comma from sed call (BASENAME="...")
+  - Removed redundant scale command from bc call
+  - Check for (and prevent) upscaling of video
+  - Lower the bit rate with regards to bits per pixel
+  - Moved crop detection around
+  - Updated crop detection for special cases w=0 and h=0; this also fixes a
+    potential division by zero
+  - Updated comments
+  - Added $CH and $CW to function c so both get unset
+  - Dimension -> Resolution
+  - Display $CW x $CH as resolution if available
+  - Make sure ID_VIDEO_WIDTH, ID_VIDEO_HEIGHT, ID_VIDEO_FPS and ID_AUDIO_NCH
+    aren't negative
+  - Fixed the for loop that looks at output resolutions
+1.1.1:
+  - Fixed behavior when supplied cropping values are bogus
+1.1.2:
+  - Another attempt to correct the behavior in case of bogus crop values; only
+    accept numbers and let mencoder do the dying
+  - Changed loop expression in c-style for-loop once more just for correctness'
+    sake
+1.1.3:
+  - Direct error messages to stderr
+  - Minor comment fix
+  - If there's a ".p" file treat video as progressive
+  - Users can add mencoder options on a per-file basis
+  - Added tip about DVD ripping
+  - Added clear_variables function
+1.1.4:
+  - Added possibility to set maximum output resolution, thanks to L. Pearce for
+    the idea; see comments regarding $MAX_RES
+  - Changed comments regarding MP4Box crashes (added suggestion for real
+    workaround)
+1.1.5:
+  - Added $MP4BOX_IPOD to set whether "MP4Box -ipod ..." is run
+  - Added possibility to renice the script (alter its priority) use "-oac pcm"
+    instead of "-oac copy"; it does add a little overhead (and we need more
+    drive space) but it helps keeping audio and video in sync; also some audio
+    codecs cannot be muxed into AVI, e.g. Vorbis, so now we're working around
+    this issue
+1.1.6:
+  - Split release into ChangeLog, README, INSTALL and script itself
+  - Added possibility to use neroAacEnc AAC encoder instead of faac; it's not
+    Open Source but I ran into an issue with faac earlier and apparently it's
+    not maintained anymore
+  - Increased accuracy of aspect calculation; I doubt this has any effect
+1.1.7:
+  - Mentioned faac in INSTALL
+  - Added possibility to override neroAacEnc binary (README for more info)
+  - Added XviD support; it's so much faster than x264, had to add it
+  - Added configuration file example to README
+1.1.8:
+  - Use random ASCII file names to work around problems with special characters
+    (e.g. with MPlayer's pcm writer and gpac)
+  - Made the script a little bolder ;)
+1.1.9:
+  - Make sure muxing doesn't result in variable video frame rate
+  - Cleaned up quite a bit (quoting, brackets, ...)
+  - Better error detection
+  - Clean user configuration file before sourcing it
+  - Write initial configuration file
+  - Got rid of all evals
+  - Removed hard coding of iPod-specific encoder options
+1.1.10:
+  - Removed bits per pixel usage
+  - Added compressibility check
+  - Deleted INSTALL file (put content into README)
+  - Cleaned up README
+  - Hopefully the last batch of quoting fixes
+  - Made scripting style more consistent
+  - Better sed scripts
+  - Use $HOME instead of "~" expansion
+  - Moved command substitutions out of [tests]
+1.1.11:
+  - During compressibility test capture mencoder output in a file and display
+    content of file in case mencoder exits with an error, otherwise user
+    wouldn't know what went wrong
+  - Used long command options when available
+  - Don't write/source temporary configuration file
+  - Don't just source the mplayer -identify output either for that matter
+  - Only load necessary variables from configuration file and mplayer's identify
+    output
+  - Use random name for myidentify output, too
+  - Set sane PATH, IFS and umask
+  - Clear all aliases and the command path hash
+  - Prevent core dumps
+  - End shebang line with hyphen
+  - Changed name of array media_vars to all_media_vars and added an array called
+    mplayer_media_vars for clarity's sake
+  - Made parsing of file for variable a function
+  - Changed the initial configuration a bit
+  - Refuse to crop repeatedly
+  - Demand Bash, version 2 or greater
+1.1.12:
+  - Added subtitle support (SRT, SUB and VobSub)
+  - Added $TRACK_LANG so user can set a three digit language code. It's not
+    _that_ useful because you can not set it on a per-file or even-per track
+    basis. Why did I even add it in the first place? :D
+  - Call MP4Box from within the tmp directory do avoid another bug (for some
+    reason MP4Box added something like ".idx" to the command line otherwise)
+  - Some small fixes (comments, README)
+  - Call MP4Box without "-isma" because it removes the subtitles
+1.1.13:
+  - Script now refuses to (try to) convert mpeg containers
+  - Updated README
+1.1.14:
+  - Now 3GPP text subtitles (.ttxt) are recognized as well
+  - New configuration variable SBTL, see README
+  - Pass TRACK_LANG & video fps along as a global MP4Box argument
+  - Changed subtitle handling, now for text subtitles the 3GPP header is adapted
+    slightly for proper display (I tried to follow the findings of this blog
+    entry: http://blog.jharding.org/2008/11/subtitles-on-appletv-and-iphone.html
+    Thanks for the ideas!)
+  - Use "-ipod" argument directly when muxing
+1.1.15:
+  - Fixed subtitle related mistake
+  - Set vim modeline
+  - Some cleanups (in README as well)
+1.1.16:
+  - Fixed quite a few return checks that caused avi2mp4.sh to not terminate
+    properly
+  - Adjusted ChangeLog's style :)
+1.1.17:
+  - Fixed a few spelling error
+  - Changed initial configuration (point out a few differences between PSPs and
+    iPods
+1.1.18:
+  - Fixed the if-block that deals with cropping and updating the aspect ratio
+1.1.19:
+  - Use wildcard when cleaning up instead of trying to delete file by file
+  - Changed default config for PSPs/iPods, apparently x264 changed b frame
+    behaviour or default config regarding b frames
+  - Substitute some more short command options with long ones
+    (wc/bc/grep/renice)
+  - Recomplicated track language handling again to fix VobSub track languages
+    (these are now determined by MP4Box as it should be); the video track does
+    not get a language assigned anymore as that was more or less stupid anyway;
+    the language code is now applied only to audio and text subs
+
+# vim: set expandtab shiftwidth=2 tabstop=2:

@@ -1,0 +1,151 @@
+
+=================================
+|        H.264 Matrices         |
+=================================
+
+As of h264enc version 5.1, the package includes matrix files from
+Sharktooth, MP4Guy, Audionut and Soulhunter
+
+The "eqm_avc_hr_matrix" file is the Sharktooth Quantization Matrix
+and is designed for these purposes:
+
+- High-quality backups of DVDs at full resolution (anamorphic)
+  and bitrates of at least 1300-1400 kbps
+
+- non anamorphic/vertically resized encodes at bitrates of at
+  least 1000 kbps
+
+The package futher includes different quantization matrices from
+MP4Guy, Audionut and Soulhunter. Below follows a short description.
+
+mp4guy_lrm_matrix
+-----------------
+
+The LRM matrix is designed for low to very low bitrate encodes. It
+is designed to avoid artifacts more than to preserve detail.
+
+mp4guy_mrm_matrix
+-----------------
+
+The MRM matrix is designed to work well at moderate bitrates and
+sometimes works very well at low or high bitrates. It is designed
+to keep a fair balance between artifacts and detail.
+
+mp4guy_hrm_matrix
+-----------------
+
+The HRM matrix is for high to very high bitrates. This matrix is also
+designed to perform well with other bitrates.
+
+
+mp4guy_low_bitrate_matrix
+-------------------------
+
+This matrix does the following...
+-Intra more aggresively compressed then inter
+-Chroma roughly twice as aggressively compressed as luma
+-High frequencies are dropped aggressively on intra
+-High frequencies are dropped semi-aggressively on inter
+
+mp4guy_high_detail_matrix
+-------------------------
+
+The high-detail matrix is designed to be very sharp and works best
+at moderate bitrates.
+
+mp4guy_smooth_matrix
+--------------------
+
+The smooth matrix is an all purpose matrix that blocks very little
+and gives a similar smooth look like in MPEG2 video.
+
+prestige_matrix
+---------------
+
+This matrix is specifically designed for grainy sources and preserves
+the grain very well. This matrix is also used on some Blueray DVD titles
+(The Prestige)
+
+xmen3_matrix
+------------
+
+This matrix was used when encoding the X-Men 3 movie. It is a rather
+flat matrix which performs well on clean sources and often on grainy
+sources as well
+
+q_matrix
+--------
+
+The "q_matrix", coming with the avc reference software, uses the same values
+in all intra4x4 matrices and the same values in all inter4x4 matrices
+
+q2_matrix
+---------
+
+The "q2_matrix", coming with the avc reference software, uses the same
+values in all intra4x4 matrices and the same values in all inter4x4 matrices
+
+soulhunter_v1_matrix
+--------------------
+
+This matrix does the following...
+- It quantizes intra-frames stronger than inter-frames
+- It drops high frequencys stronger than low ones
+- It treats the luma and the chroma equally
+
+soulhunter_v2_matrix
+--------------------
+
+This matrix does the following...
+- It quantizes intra-frames and inter-frames equally
+- It drops a lot high frequencys in the 4X4 chroma
+- It generally drops a lot high frequencys
+
+audionut_high_bitrate_matrix
+----------------------------
+
+As the name says it, this matrix is specifically designed to perform
+well on high bitrates (>1000 kbps)
+
+audionut_general_matrix
+-----------------------
+
+This is a matrix designed for general use which goes well with low
+and medium bitrates
+
+
+========================================================================
+
+You can load a matrix file with the help of the 'h264enc' script
+if you choose for the 'Advanced Options' option when asked and come
+to the point where the script asks you if you want to use predefined or
+custom matrix. Answer 'y', choose for option 2 and provide the full path
+to the matrix file. I suggest you copy the matrix file to your home
+directory or to your 'Documents' directory.
+
+Example of loading matrix file with h264enc:
+
+Provide the Custom Matrix file: /home/your_username/eqm_avc_hr_matrix
+
+========================================================================
+
+
+By default, when you run the 'install' script of the package, it
+will install all matrix files in this directory:
+
+/usr/local/share/doc/h264enc-<version>/matrices
+
+or if you have obtained the RPM package, then
+the matrix files will be in:
+
+/usr/share/doc/h264enc-<version>/matrices
+
+or
+
+/usr/share/doc/packages/h264enc-<version>/matrices
+
+
+Thanks to Sharktooth, MP4Guy, Audionut and Soulhunter :)
+
+
+

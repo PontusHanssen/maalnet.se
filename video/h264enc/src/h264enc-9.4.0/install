@@ -1,0 +1,78 @@
+#!/bin/bash
+#
+# installation script for h264enc
+#
+
+PREFIX=/srv/http/projekt/video/h264enc/pkg/usr
+
+# Check for root
+if [ $PREFIX = "/srv/http/projekt/video/h264enc/pkg/usr" ] && [ $UID != 0 ]; then
+	echo "-> Login as root to install!"
+	exit 1
+fi
+
+BINDIR=$PREFIX/bin
+DOCDIR=$PREFIX/share/doc/h264enc
+MANDIR=$PREFIX/share/man/man1
+
+# Remove previously installed doc dirs
+for i in $PREFIX/share/doc/h264enc*; do
+	test -d $i && rm -rf $i
+done
+
+# make dirs if needed
+for i in $BINDIR $DOCDIR $MANDIR; do
+	if [ ! -d $i ]; then
+		mkdir -p -m 755 $i 2>/dev/null
+		if [ $? != 0 ]; then
+			echo "-> Failed to make directories... exiting!"
+			exit 1
+		fi
+	fi
+done
+
+# Copy h264enc script & doc/man files
+cp -f $(pwd)/h264enc $BINDIR && chmod 755 $BINDIR/h264enc
+cp -f $(pwd)/man/h264enc.1 $MANDIR && gzip -9 $MANDIR/h264enc.1 && chmod 644 $MANDIR/h264enc.1.gz
+cp -f $(pwd)/doc/* $DOCDIR && chmod 644 $DOCDIR/*
+
+# Make matrix dir in doc & copy matrix files
+mkdir -p -m 755 $DOCDIR/matrices && cp -f $(pwd)/matrices/* $DOCDIR/matrices && chmod 644 $DOCDIR/matrices/*
+
+# Create uninstall script in $DOCDIR
+cat<<EOF>>$DOCDIR/uninstall
+#!/bin/bash
+
+if [ \$UID != 0 ]; then
+	echo "-> Login as root to uninstall!"
+	exit 1
+fi
+
+rm -f $BINDIR/h264enc
+rm -f $MANDIR/h264enc.1.gz
+rm -rf $DOCDIR
+echo ""
+echo "-> Done"
+echo "-> Thanks for using h264enc!"
+echo ""
+
+exit 0
+EOF
+
+echo ""
+echo "-> Installation successful"
+echo ""
+echo "-> Script is installed in $BINDIR"
+echo "-> Doc files are installed in $DOCDIR"
+echo "-> Matrix files are installed in $DOCDIR/matrices"
+echo "-> Man page is installed in $MANDIR"
+echo ""
+if [ -f $DOCDIR/uninstall ]; then
+	chmod 755 $DOCDIR/uninstall
+	echo "If you want to uninstall the program and all of its files"
+	echo "afterwards, go to the doc directory in $DOCDIR"
+	echo "and run as root the 'uninstall' script"
+fi
+echo ""
+
+exit 0

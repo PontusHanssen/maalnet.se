@@ -1,0 +1,29 @@
+--2012-04-17 06:27:29--  http://www.thetvdb.com/banners/posters/75760-12.jpg
+Resolving www.thetvdb.com... 69.25.135.180
+Connecting to www.thetvdb.com|69.25.135.180|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 179037 (175K) [image/jpeg]
+Saving to: `75760-12.jpg.3'
+
+     0K .......... .......... .......... .......... .......... 28% 63.9K 2s
+    50K .......... .......... .......... .......... .......... 57%  256K 1s
+   100K .......... .......... .......... .......... .......... 85%  253K 0s
+   150K .......... .......... ....                            100% 11.7M=1.2s
+
+2012-04-17 06:27:30 (148 KB/s) - `75760-12.jpg.3' saved [179037/179037]
+
+--2012-04-17 06:27:30--  http://i/
+Resolving i... failed: Name or service not known.
+wget: unable to resolve host address `i'
+--2012-04-17 06:27:40--  http://met/
+Resolving met... failed: Name or service not known.
+wget: unable to resolve host address `met'
+--2012-04-17 06:27:50--  http://your/
+Resolving your... failed: Name or service not known.
+wget: unable to resolve host address `your'
+--2012-04-17 06:28:00--  http://mother.jpg/
+Resolving mother.jpg... failed: Name or service not known.
+wget: unable to resolve host address `mother.jpg'
+FINISHED --2012-04-17 06:28:20--
+Total wall clock time: 52s
+Downloaded: 1 files, 175K in 1.2s (148 KB/s)

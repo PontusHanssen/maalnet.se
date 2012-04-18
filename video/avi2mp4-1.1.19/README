@@ -1,0 +1,278 @@
+avi2mp4.sh                                                        README
+
+           ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ 
+          ||a |||v |||i |||2 |||m |||p |||4 |||. |||s |||h ||         
+          ||__|||__|||__|||__|||__|||__|||__|||__|||__|||__||
+          |/__\|/__\|/__\|/__\|/__\|/__\|/__\|/__\|/__\|/__\|
+
+
+-------------- Converts video files in batch mode to MP4 ---------------
+
+Where to get it: http://forum.doom9.org/showthread.php?t=133598
+
+Before putting this script to serious use encode a few samples first.
+
+avi2mp4.sh is a batch converter. For each file a resolution gets calcu-
+lated and a compressibility test determines the minimum bit rate needed
+for the level of quality the user asks for.
+
+If this isn't possible with the maximum bitrate the user allows, then
+the output resolution gets downsized and a new compressibility test
+starts.
+
+Once a matching pair of bit rate and resolution has been found the input
+file gets converted to H.264/MPEG-4 AVC or MPEG-4 video and AAC audio.
+Finally these streams are wrapped into MP4.
+
+Different kinds of subtitles can be added: SRT, SUB, 3GPP (TTXT) and
+VobSub.
+
+----------------------------- Requirements -----------------------------
+
+- bc calculator
+- faac or neroAacEnc (even Wine and a Windows binary will do)
+- mplayer
+- mencoder
+- aacgain (at least v1.7.0; you can find a Debian package at RareWares:
+  http://www.rarewares.org/debian/packages/unstable/)
+- MP4Box (part of gpac; v0.4.4 or later required)
+
+------------------------- Compressibility Tests ------------------------
+
+The compressibility test is new. Send me an e-mail with concerns or
+ideas you might have.
+
+--------------------------------- Hints --------------------------------
+
+Global options need to be set in a file in your user's home directory,
+namely ~/.avi2mp4.conf. An initial configuration file will be created.
+
+MEncoder is used for the video conversion. There are multiple possibili-
+ties to influence MEncoder's behaviour. The first is the configuration
+variable MENCODER_OPTS. The content will be passed on to MEncoder.
+
+A second possibility is to add MEncoder options on a per file basis.
+Put the desired options in a file and name it like the input file name
+extended by the suffix ".me" (e.g. movie.avi.me).
+
+You can add video filters on a per file basis as well. Write them into
+a file the same way as before, only this time use the suffix ".vf". Your
+filters will be prepended to the existing chain (scale=x:y,harddup).
+
+avi2mp4.sh searches the video filter chain for "crop" statements. If one
+is found the calculation of the output resolution will be adjusted
+accordingly.
+
+You can indicate that a video is Progressive NTSC by creating a file
+with the suffix ".p" (frame rate of the output video will be 23.976
+frames per second for NTSC input).
+
+--------------------------- MPEG containers ----------------------------
+
+MPEG containers are problematic because they don't contain a proper
+index like AVI containers do. This wasn't a problem until the
+compressibility test was introduced. Since then avi2mp4.sh relies on
+being able to "jump" through the input file. More often then not this
+didn't work with MPEG containers.
+
+Because of that input files are now skipped when an MPEG container is
+detected. You'll have to re-multiplex the files to, e.g., AVI:
+
+mencoder -ovc copy -oac copy input.mpg -o movie.avi
+
+To rip a DVD simply dump the title you want to convert to your disk
+first:
+
+mencoder dvd:// -ovc copy -oac copy -o movie.avi
+
+Finally:
+
+avi2mp4.sh movie.avi
+
+-------------------------------- iPods ---------------------------------
+
+You want your videos to play on your iPod?
+
+- obey bit rate and resolution limits
+- no "B" frames allowed. Also, with H.264, the baseline profile level
+  must be set and CABAC disabled
+	XVID_ENCOPTS=max_bframes=0
+	X264_ENCOPTS=nocabac:level_idc=30:bframes=0
+- AAC's Low Complexity (LC) profile must be used
+
+Videos created with the initial configuration file should work on your
+iPod out of the box. Same should be the case for your PSP.
+
+Please also read about the configuration variables "MP4BOX_IPOD" and
+"SBTL".
+
+----------------------------- Configuration ----------------------------
+
+Available options:
+
+- CT_PERCENT
+  Percentage of the video that gets analyzed during compressibility
+  test
+
+  Example:
+  CT_PERCENT=5
+
+- CT_QUAL
+  Percentage of video bit rate of output of compressibility test that
+  you want to use
+
+  Example:
+  CT_QUANT=55
+
+- CT_X264_CRF
+  x264's Constant Rate Factor used during compressibility test
+
+  Defines what you consider 100% quality. Reasonable values: 18-22
+  
+  Example:
+  CT_X264_CRF=20
+
+- TMP_DIR
+  Directory for temporary files
+
+  Example:
+  TMP_DIR=/home/r2d2/rip/tmp
+
+- WORK_DIR
+  Output directory
+
+- MAX_BITRATE
+  Maximum allowed video bit rate
+
+  Example:
+  MAX_BITRATE=1000
+
+- USE_NERO_AAC
+  Use neroAacEnc instead of faac for audio encoding
+
+  Example:
+  USE_NERO_AAC=yes
+
+- NERO_OVERRIDE
+  Override the Nero AAC encoder binary
+
+  The Linux binary of the Nero AAC encoder is slower than its Windows
+  counterpart (as of the time of this writing). But we can use the
+  Windows binary.
+
+  Example:
+  NERO_OVERRIDE=wine neroAacEnc_SSE.exe
+
+- FAAC_ENCOPTS
+  faac encoding options
+
+  Example:
+  FAAC_ENCOPTS=-q 80
+
+- NAAC_ENCOPTS
+  neroAacEnc encoding options
+
+  Example:
+  NAAC_ENCOPTS=-q 0.39 -lc
+
+- VIDEO_CODEC
+  Video codec selection
+
+  Valid choices: "xvid" and "x264".
+
+  Example:
+  VIDEO_CODEC=x264
+
+- X264_ENCOPTS
+  x264 encoding options
+
+  Example:
+  X264_ENCOPTS=frameref=3:partitions=all:mixed_refs=1:threads=auto
+
+- XVID_ENCOPTS
+  Xvid encoding options
+
+  Example:
+  XVID_ENCOPTS=par=vga11
+
+- MENCODER_OPTS
+  Extra options to pass to mencoder
+
+  Example:
+  MENCODER_OPTS=-sws 1
+
+- MAX_RES
+  Maximal resolution, defaults to 640x480
+
+  Example:
+  MAX_RES=320x240
+
+- MP4BOX_IPOD
+  Whether to runs "MP4Box -ipod" on the resulting MP4 files
+
+  The "-ipod" switch was introduced by the MP4Box developers to increase
+  compatibility with iPods.
+
+  I don't really think this is needed anymore with a recent firmware.
+
+  Example:
+  MP4BOX_IPOD=yes
+
+- RENICE
+  Alter priority of avi2mp4.sh
+
+  Example:
+  RENICE=19
+
+- SUBTITLES
+  If set to "yes" avi2mp4.sh looks for files with the extension ".srt",
+  ".ttxt", ".idx" and/or ".sub". If they're found they get added to the
+  resulting MP4 file. Mind you the subtitles won't be "hardcoded" into
+  the video. They're just added into the MP4 container as additional
+  tracks, hence your player has to support them, otherwise they won't
+  show up. For Apple devices also take a look at the configuration
+  variable "SBTL".
+
+  Say your input file is named "zz-aa.avi", then the script would look
+  for "zz-aa.srt", "zz-aa.srt", "zz-aa.idx" and/or "zz-aa.sub".
+
+  The text subtitles will be converted to 3GPP (.ttxt) format first. Then
+  the 3GPP header will be modified in a way that the subtitles
+  (hopefully) show up in a nice way. In detail the width of the subtitle
+  box gets set to the width of the video, the height to 20% of the video
+  height and the vertical translation is offset as well. If it's ugly
+  you can just e-mail me and we can try to fix it.
+
+  If your input file is already in 3GPP format nothing will be changed
+  by avi2mp4.sh.
+
+  Example:
+  SUBTITLES=yes
+
+- SBTL
+  If set to "yes" avi2mp4.sh will call "sbtlpatch" after muxing. The
+  little tool alters the handler type of text subtitle streams within
+  MP4 containers so Apple players recognize that a text stream is really
+  a subtitle.
+
+  You can find the source of sbtlpatch here:
+  http://forum.doom9.org/showthread.php?t=145192
+
+  FYI: MP4Box (post 0.4.5) can change the handler type as well.
+
+  Example:
+  SBTL=yes
+
+- TRACK_LANG
+  Allows to specify a default track language that then gets set for the
+  audio and text subtitle tracks. Has to be a ISO 639-2 language code
+  (three digits). Get a listing with "MP4Box -languages".
+
+  I don't even know why I put this into the script... well, I read that
+  some players don't show subtitles if a subtitle track's language is
+  unset.
+
+  Example:
+  TRACK_LANG=eng
+
+-------------------------------- The End -------------------------------

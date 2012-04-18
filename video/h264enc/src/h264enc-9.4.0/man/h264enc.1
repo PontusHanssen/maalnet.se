@@ -1,0 +1,360 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" add new suboption
+.de IPs
+.IP "\\$1"
+..
+.TH h264enc 1 "Jun 25, 2010"
+.SH NAME
+h264enc \- the interactive shell script ripper
+
+.SH SYNOPSIS
+.B h264enc
+[\-1p|\-2p|\-3p|\-qp|\-crf|\-b|\-e|\-r|\-sc|\-scan|\-iso|\-spr|\-mfr|\-bpp|\-bpb|\-v|\-help] [\-p <preset>] [preset_file]
+.br
+
+.SH DESCRIPTION
+\fBh264enc\fR is an advanced and powerful interactive menu-driven shell script which uses the encoding
+utility \fBMEncoder\fR from the \fBMPlayer\fR project. The script can be used to encode DVDs, (S)VCDs or
+regular video files to the high-quality H.264 video format (also known as AVC (Advanced Video Coding) or
+MPEG-4 Part 10). At the moment, the script supports virtually all options of the libx264 library and a variety
+of audio codecs, including support for \fBup to three\fR DVD audio tracks muxed into the MKV/MP4/OGM/TS containers.
+\fBh264enc\fR is targeted primarily at power users or users who understand the process of video encoding
+and want to tweak their settings in order to achieve the best possible quality/file size of their encodes.
+For more information and a FAQ, visit \fPhttp://h264enc.sourceforge.net\fR
+.LP
+\fBh264enc\fR uses a configuration file stored in the user's home directory inside a hidden directory
+named as .h264enc where the user can enable or disable many of the supported audio/video filters and
+containers. This can reduce the time it takes to pass through the script when the user disables filters
+and/or containers he never intends to use. Further, the configuration file stores the paths to the
+required programs and a few other things like some script options, MPlayer flags and email support.
+
+.SH REQUIREMENTS
+- MPlayer/MEncoder >= 1.0rc2 compiled with libx264 support (SVN highly recommended)
+.br
+- libx264
+.br
+- lsdvd
+.br
+- dvdxchap from 'ogmtools' (for DVD chapter export)
+.br
+- LAME (for MP3 audio encoding)
+.br
+- FAAC (for AAC audio encoding)
+.br
+- neroAacEnc (for AAC/AAC+ audio encoding)
+.br
+- aacplusenc (for AAC+ audio encoding)
+.br
+- oggenc (for Vorbis audio encoding)
+.br
+- flac (for FLAC audio encoding)
+.br
+- MP4Box from 'gpac' (for AVI -> MP4 container conversion)
+.br
+- mkvtoolnix (for AVI -> MKV container conversion)
+.br
+- ogmtools (for AVI -> OGM container conversion)
+.br
+- tsMuxeR (for AVI -> TS container conversion)
+.br
+
+.SH PARAMETERS
+.TP
+.B -1p
+Encode in 1-pass mode
+.TP
+.B -2p
+Encode in 2-pass mode
+.TP
+.B -3p
+Encode in 3-pass mode
+.TP
+.B -qp
+Encode in fixed-quant mode
+.TP
+.B -crf
+Encode in constant rate factor mode
+.TP
+.B <passmode> -p <preset> [-t <tune>] [-pf <profile>]
+Use a predefined H.264 quality preset, where \fB<passmode>\fR is the desired encoding mode (\fB-1p\fR or
+\fB-2p\fR or \fP-3p\fR or \fP-qp\fR or \fP-crf\fR) and \fB<preset>\fR is the desired quality preset to use (see below).
+Note that the \fP-t\fR and \fP-pf\fR options only work with the x264 presets below! See examples at the end of this option.
+.
+.TP
+.RS
+.IPs
+.B cp --------> Load a custom preset file (see example below)
+.br
+.B ulq -------> Ultra Low Quality preset
+.br
+.B elq -------> Extreme Low Quality preset
+.br
+.B vlq -------> Very Low Quality preset
+.br
+.B lq --------> Low Quality preset
+.br
+.B mq --------> Medium Quality preset
+.br
+.B nq --------> Normal Quality preset (recommended)
+.br
+.B hq --------> High Quality preset (recommended)
+.br
+.B vhq -------> Very High Quality preset (recommended)
+.br
+.B ehq -------> Extreme High Quality preset
+.br
+.B uhq -------> Ultra High Quality preset
+.br
+.B ihq -------> Insane High Quality preset
+.br
+.B nlq -------> Near Lossless Quality preset
+.br
+.B fghq ------> Film Grain optimized High Quality preset
+.br
+.B ani -------> Anime preset
+.br
+.B anihq -----> Anime High Quality preset
+.br
+.B vdhq ------> VDPAU/DXVA High Quality (High@L4.1) preset
+.br
+.B vdehq -----> VDPAU/DXVA Extreme High Quality (High@L4.1) preset
+.br
+.B vdihq -----> VDPAU/DXVA Insane High Quality (High@L4.1) preset
+.br
+.B fl --------> Flash Player preset
+.br
+.B flhq ------> Flash Player High Quality preset
+.br
+.B qt --------> QuickTime preset
+.br
+.B qthq ------> QucikTime High Quality preset
+.br
+.B bd40 ------> Blu-ray (Main@L4.0) preset
+.br
+.B bdhq40 ----> Blu-ray High Quality (High@L4.0) preset
+.br
+.B bd41 ------> Blu-ray (Main@L4.1) preset
+.br
+.B bdhq41 ----> Blu-ray High Quality (High@L4.1) preset
+.br
+.B avchd -----> AVCHD (Main@L4.0) preset
+.br
+.B avchdhq ---> AVCHD High Quality (High@L4.1) preset
+.br
+.B sdb -------> Stand-alone HW players SD (Baseline@L3.1) preset
+.br
+.B sdm -------> Stand-alone HW players SD (Main@L3.1) preset
+.br
+.B sdh -------> Stand-alone HW players SD (High@L3.1) preset
+.br
+.B hdb -------> Stand-alone HW players HD (Baseline@L4.1) preset
+.br
+.B hdm -------> Stand-alone HW players HD (Main@L4.1) preset
+.br
+.B hdh -------> Stand-alone HW players HD (High@L4.1) preset
+.br
+.B ag1 -------> Android G1 preset
+.br
+.B ag1hq -----> Android G1 High Quality preset
+.br
+.B ipc -------> Apple iPod Classic preset
+.br
+.B ipchq -----> Apple iPod Classic High Quality preset
+.br
+.B ip --------> Apple iPod preset
+.br
+.B iphq ------> Apple iPod High Quality preset
+.br
+.B iph -------> Apple iPhone preset
+.br
+.B iphhq -----> Apple iPhone High Quality preset
+.br
+.B atv -------> AppleTV preset
+.br
+.B atvhq -----> AppleTV High Quality preset
+.br
+.B ar --------> Archos 605 preset
+.br
+.B arhq ------> Archos 605 High Quality preset
+.br
+.B ar5 -------> Archos 5 preset
+.br
+.B ar5hq -----> Archos 5 High Quality preset
+.br
+.B bb --------> Blackberry 9000 preset
+.br
+.B bbhq ------> Blackberry 9000 High Quality preset
+.br
+.B nks60 -----> Nokia S60 preset
+.br
+.B nks60hq ---> Nokia S60 High Quality preset
+.br
+.B psp -------> Sony PSP preset
+.br
+.B psphq -----> Sony PSP High Quality preset
+.br
+.B ps3 -------> Sony PS3 preset
+.br
+.B ps3hq -----> Sony PS3 High Quality preset
+.br
+.B mz --------> Microsoft Zune preset
+.br
+.B mzhq ------> Microsoft Zune High Quality preset
+.br
+.B mx --------> Microsoft XBOX 360 preset
+.br
+.B mxhq ------> Microsoft XBOX 360 High Quality preset
+.br
+.B ultrafast (x264 preset)
+.br
+.B superfast (x264 preset)
+.br
+.B veryfast (x264 preset)
+.br
+.B faster (x264 preset)
+.br
+.B fast (x264 preset)
+.br
+.B medium (x264 preset)
+.br
+.B slow (x264 preset)
+.br
+.B slower (x264 preset)
+.br
+.B veryslow (x264 preset)
+.br
+.B placebo (x264 preset)
+.RE
+.
+.TP
+.RS
+.IPs
+Example of presets usage: \fBh264enc \-2p \-p hq\fR
+.IPs
+The above example will encode the DVD or input video file
+in 2-pass mode using the High Quality (HQ) preset
+.IPs
+Load a custom preset from a file:
+.br
+\fBh264enc \-2p \-p cp /path/to/file/preset.cfg\fR
+.IPs
+Please have a look at the \fBpreset.cfg\fR file inside the
+h264enc package to give you an example on how to write
+a custom preset. The \fBpreset.cfg\fR file is usually located
+inside the doc directory of the h264enc package.
+.IPs
+Examples of x264 presets/tune/profiles usage:
+.br
+\fBh264enc -2p -p slow
+.br
+h264enc -2p -p slow -t film
+.br
+h264enc -2p -p slow -pf main
+.br
+h264enc -2p -p slow -t film -pf high\fR
+.IPs
+The first example encodes the input with x264's slow preset.
+The second one does the same but tunes the encode settings for
+film footage. The third example is as the first one but selects
+the main H.264 profile and the last example uses both a tuning for
+film and selects the high H.264 profile. You can also switch the
+\fB-t\fR and \fB-pf\fR options, eg: \fBh264enc -2p -p slow -pf main -t film\fR
+.RE
+.
+.TP
+.B -b /path/to/file/batchfile
+Load a batch file generated by \fBthis\fR script.
+This option can be useful for testing or debugging the MEncoder parameters
+and for batch encoding.
+.TP
+.B -e
+Edit the config file from within the terminal. This option defaults
+to using the 'nano' text editor but one can manually set his
+preferred editor in the EDITOR variable of the config file. The config
+file is located in \fB/home/username/.h264enc\fR
+.TP
+.B -r
+Reset configuration file. As of version 8.5.7, h264enc uses a configuration file
+which contains the paths to the programs needed for its correct operation. This
+option tells the script to remove and recreate the config file using the default
+values. It can be used to restore the original values of the config file in case
+the user has modified it and wants to get rid of those modifications.
+It is also used for resetting the config file in case the user has installed a required program
+\fBafter\fR h264enc has generated its config file. If this is the case, the config file will not
+contain the path to the newly installed program so one has to reset the file in order to find it. This is
+because the config file is generated/updated only once: if it's not available on the user's system
+and during config version updates.
+The configuration file is located in \fB/home/username/.h264enc/config\fR
+.TP
+.B -sc
+Perform a sanity check. This will check for the programs which are required for
+the correct operation of this script and it will print the status in a list. It will
+also display which audio codecs are supported by MEncoder.
+.TP
+.B -scan
+Scan the DVD disc and display extensive information about it.
+With this option, one can display or export the information
+to a file on disk in text, perl, python, ruby or xml format.
+.TP
+.B -iso
+Create an ISO image of the DVD disc. Note that this option does no do any stripping
+of specific titles, audio languages and/or subtitles. It dumps the DVD content 1:1
+to an ISO image.
+.TP
+.B -spr
+Calculate the Storage and Pixel Aspect Ratios (SAR/PAR) for various resolutions.
+.TP
+.B -mfr
+Calculate the maximum allowed frame references within DPB (Decoded Picture Buffer) limits
+for different H.264 levels and resolutions.
+.TP
+.B -bpp
+This is an informative option which lets you calculate
+the Bits Per Pixel (bpp) values for various resolutions.
+The bpp value represents how much bits each pixel gets. The
+higher the bpp value is, the more distinct colors the pixels
+will have which leads to a higher overall picture quality.
+Note that these values are not absolute! For video content
+with a lot of black in it, a bpp value of 0.14 may look
+very good. Video content with a lot of high motion scenes
+may still look bad with a bpp value of 0.20, so this really
+depends on the content you are willing to encode and the
+resolution you choose when scaling down.
+.TP
+.B -bpb
+This option is similar to the \fB-bpp\fR one, except it calculates
+the Bits Per Block (bpb) values for various resolutions.
+The bpb value expresses how many bits each 16x16 macroblock
+gets. Good bpb values are between 37-52. As is the case with
+Bits Per Pixel, the bpb values are not absolute and depend
+on the video content you are willing to encode and the
+resolution you choose when scaling down.
+.TP
+.B -help
+Display built-in help of the h264enc script and exit
+.TP
+.B -v
+Display version of the h264enc script and exit
+
+.SH SEE ALSO
+.BR mencoder (1),
+.BR lsdvd (1),
+.BR dvdxchap (1),
+.BR lame (1),
+.BR oggenc (1),
+.BR flac (1),
+.BR mkvmerge (1),
+.BR ogmmerge (1),
+.BR mp4box (1)
+
+.SH AUTHORS
+.B h264enc
+was written by Grozdan Nikolov <neutrino8@gmail.com>
+.PP
+This manual page was written by the author of h264enc
+
+.SH BUG REPORTS
+Please send all bug reports and/or questions/suggestions to <neutrino8@gmail.com>
+
+.SH WWW
+http://h264enc.sourceforge.net
